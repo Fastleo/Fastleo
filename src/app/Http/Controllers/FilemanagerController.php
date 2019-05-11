@@ -21,7 +21,7 @@ class FilemanagerController extends Controller
     public function __construct(Request $request)
     {
         // upload folder name
-        $this->dir = base_path('public' . $this->upload);
+        $this->dir = base_path('storage/app/public' . $this->upload);
 
         // Create uploads dir
         if (!is_dir($this->dir)) {
@@ -33,7 +33,7 @@ class FilemanagerController extends Controller
             if ($request->get('folder') == '/') {
                 $request->merge(['folder' => '']);
             }
-            $this->dir = base_path('public' . $this->upload . '/' . $request->get('folder'));
+            $this->dir = base_path('storage/app/public' . $this->upload . '/' . $request->get('folder'));
             $this->upload = $this->upload . $request->get('folder');
         }
 

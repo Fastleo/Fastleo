@@ -35,12 +35,12 @@ class ServiceProvider extends BaseServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
 
         // Views
-        $this->loadViewsFrom(__DIR__ . '/resources/views', 'fastleo');
+        $this->loadViewsFrom(__DIR__ . '/views', 'fastleo');
 
         // Src
         $this->publishes([
             __DIR__ . '/config/fastleo.php' => config_path('fastleo.php'),
-            __DIR__ . '/resources' => public_path('vendor/fastleo'),
+            __DIR__ . '/resources' => base_path('storage/app/public/fastleo'),
         ], 'fastleo');
     }
 

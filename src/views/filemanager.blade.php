@@ -7,7 +7,7 @@
     <script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
     <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.8.2/css/all.css">
-    <link rel="stylesheet" href="{{ asset('vendor/fastleo/css/filemanager.css') }}">
+    <link rel="stylesheet" href="{{ asset('storage/fastleo/css/filemanager.css') }}">
 </head>
 <body>
 <nav class="navbar navbar-light navbar-dark bg-dark flex-md-nowrap fastleo-nav">

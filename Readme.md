@@ -2,8 +2,9 @@
 
     composer require fastleo/fastleo
 
-****Publish the package’s****
+****Publish the storage and package****
 
+    php artisan storage:link
     php artisan vendor:publish --tag=fastleo --force
 
 ****Make migrate****
