@@ -29,20 +29,18 @@
                     <li class="nav-item">
                         <a href="{{ route('fastleo.info') }}" class="nav-link"><i class="fas fa-home"></i> Информация</a>
                     </li>
-                    @if(isset(request()->appmodels) and count(request()->appmodels) > 0)
-                        @foreach(request()->appmodels as $model)
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->is('fastleo/app/'. strtolower($model['name'])) ? 'active' : '' }}" href="/fastleo/app/{{ strtolower($model['name']) }}">
-                                    @if(isset($model['icon']) and $model['icon'] != '')
-                                        <i class="{{ $model['icon'] }}"></i>
-                                    @else
-                                        <i class="fas fa-box-open"></i>
-                                    @endif
-                                    {{ $model['title'] }}
-                                </a>
-                            </li>
-                        @endforeach
-                    @endif
+                    @foreach(app()->appmodels as $model)
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->is('fastleo/app/'. strtolower($model['name'])) ? 'active' : '' }}" href="/fastleo/app/{{ strtolower($model['name']) }}">
+                                @if(isset($model['icon']) and $model['icon'] != '')
+                                    <i class="{{ $model['icon'] }}"></i>
+                                @else
+                                    <i class="fas fa-box-open"></i>
+                                @endif
+                                {{ $model['title'] }}
+                            </a>
+                        </li>
+                    @endforeach
                     <li class="nav-item">
                         <a href="{{ route('fastleo.log') }}" class="nav-link"><i class="fas fa-exclamation-triangle"></i> Laravel log</a>
                     </li>

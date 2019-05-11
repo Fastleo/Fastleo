@@ -26,7 +26,7 @@ class ServiceProvider extends BaseServiceProvider
             'fastleo_composer' => json_decode(file_get_contents(__DIR__ . '/../composer.json'))
         ]);
 
-        $this->app->models = $this->appModels();
+        $this->app->appmodels = $this->appModels();
 
         // Route
         $this->loadRoutesFrom(__DIR__ . '/routes.php');
