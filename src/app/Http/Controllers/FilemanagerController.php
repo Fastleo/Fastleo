@@ -10,7 +10,7 @@ class FilemanagerController extends Controller
 {
     public $images = ['png', 'jpg', 'jpeg', 'gif'];
 
-    public $upload = '/uploads';
+    public $upload = '/storage/uploads';
 
     public $dir, $folders, $files;
 
@@ -21,7 +21,7 @@ class FilemanagerController extends Controller
     public function __construct(Request $request)
     {
         // upload folder name
-        $this->dir = base_path('storage/app/public' . $this->upload);
+        $this->dir = base_path('storage/app/public/uploads');
 
         // Create uploads dir
         if (!is_dir($this->dir)) {
@@ -33,8 +33,8 @@ class FilemanagerController extends Controller
             if ($request->get('folder') == '/') {
                 $request->merge(['folder' => '']);
             }
-            $this->dir = base_path('storage/app/public' . $this->upload . '/' . $request->get('folder'));
-            $this->upload = $this->upload . $request->get('folder');
+            $this->dir = base_path('storage/app/public/uploads/' . $request->get('folder'));
+            $this->upload = $this->upload .'/'. $request->get('folder');
         }
 
         // create thumbs folder
