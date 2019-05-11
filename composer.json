@@ -17,13 +17,13 @@
         "ext-fileinfo": "*",
         "league/csv": "^9.2",
         "doctrine/dbal": "^2.9",
-        "illuminate/support": "^5.7,<5.9",
-        "illuminate/console": "^5.7,<5.9",
-        "illuminate/filesystem": "^5.7,<5.9"
+        "illuminate/support": "^5.7",
+        "illuminate/console": "^5.7",
+        "illuminate/filesystem": "^5.7"
     },
     "require-dev": {
-        "illuminate/config": "^5.7,<5.9",
-        "illuminate/view": "^5.7,<5.9",
+        "illuminate/config": "^5.7",
+        "illuminate/view": "^5.7",
         "phpunit/phpunit": "^7.5"
     },
     "autoload": {
