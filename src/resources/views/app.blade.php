@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.8.2/css/all.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css">
-    <link rel="stylesheet" href="{{ asset('fastleo/css/admin.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/fastleo/css/admin.css') }}">
 </head>
 <body>
 <nav class="navbar navbar-light navbar-dark bg-dark flex-md-nowrap fastleo-nav">
