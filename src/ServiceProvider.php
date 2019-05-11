@@ -21,6 +21,11 @@ class ServiceProvider extends BaseServiceProvider
             ]);
         }
 
+        // Composer
+        config()->set([
+            'fastleo_composer' => json_decode(file_get_contents(__DIR__ . '/../composer.json'))
+        ]);
+
         // Route
         $this->loadRoutesFrom(__DIR__ . '/routes.php');
 
