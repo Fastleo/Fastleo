@@ -33,7 +33,7 @@ class ModelController extends Controller
         $this->name = request()->segment(3);
 
         // Model namespace
-        $this->model = 'App\\' . request()->appmodels[$this->name]['name'];
+        $this->model = 'App\\' . app()->models[$this->name]['name'];
 
         // Model exist
         if (!class_exists($this->model)) {
