@@ -21,10 +21,6 @@ class ServiceProvider extends BaseServiceProvider
             ]);
         }
 
-        // Composer
-        $fastleo_composer = json_decode(file_get_contents(__DIR__ . '/../composer.json'));
-        config()->set(['fastleo_composer' => $fastleo_composer]);
-
         // Route
         $this->loadRoutesFrom(__DIR__ . '/routes.php');
 
@@ -37,8 +33,7 @@ class ServiceProvider extends BaseServiceProvider
         // Src
         $this->publishes([
             __DIR__ . '/config/fastleo.php' => config_path('fastleo.php'),
-            __DIR__ . '/resources/css' => resource_path('../public/fastleo/css'),
-            __DIR__ . '/resources/ico' => resource_path('../public/fastleo/ico'),
+            __DIR__ . '/resources' => public_path('vendor/fastleo'),
         ], 'fastleo');
     }
 
