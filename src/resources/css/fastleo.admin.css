@@ -1,0 +1,32 @@
+.fastleo-nav {
+    color: #ffffff;
+}
+
+.fastleo-nav a {
+    color: #ffffff;
+}
+
+.fastleo-menu {
+    padding: 20px 20px;
+}
+
+.fastleo-menu a {
+    color: #000000;
+}
+
+.fastleo-menu a.active {
+    color: #ff0000;
+}
+
+.fastleo-menu a:hover {
+    color: #5e5e5e;
+    text-decoration: underline;
+}
+
+.fastleo-content {
+    padding: 20px 20px;
+}
+
+.fastleo-content a:not([class]) {
+    color: #06090a;
+}

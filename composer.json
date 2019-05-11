@@ -1,0 +1,46 @@
+{
+    "name": "fastleo/fastleo",
+    "type": "library",
+    "license": "CC-BY-SA-4.0",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "Roman Zakharov",
+            "email": "camanru@gmail.com",
+            "role": "lead"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "ext-gd": "*",
+        "ext-json": "*",
+        "ext-fileinfo": "*",
+        "league/csv": "^9.2",
+        "doctrine/dbal": "^2.9",
+        "illuminate/support": "^5.7,<5.9",
+        "illuminate/console": "^5.7,<5.9",
+        "illuminate/filesystem": "^5.7,<5.9"
+    },
+    "require-dev": {
+        "illuminate/config": "^5.7,<5.9",
+        "illuminate/view": "^5.7,<5.9",
+        "phpunit/phpunit": "^7.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Fastleo\\Fastleo\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Fastleo\\Fastleo\\Test\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Fastleo\\Fastleo\\ServiceProvider"
+            ]
+        }
+    }
+}
