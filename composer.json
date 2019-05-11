@@ -19,7 +19,8 @@
         "doctrine/dbal": "^2.9",
         "illuminate/support": "^5.7",
         "illuminate/console": "^5.7",
-        "illuminate/filesystem": "^5.7"
+        "illuminate/filesystem": "^5.7",
+        "intervention/image": "^2.4"
     },
     "require-dev": {
         "illuminate/config": "^5.7",

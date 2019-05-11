@@ -186,7 +186,7 @@ class FilemanagerController extends Controller
                 $file->move($this->dir, $name);
                 $ext = pathinfo($this->dir . '/' . $name, PATHINFO_EXTENSION);
                 if (in_array(strtolower($ext), $this->images)) {
-                    self::resize($this->dir, $name);
+                    Image::make($this->dir . '/' . $name)->resize(120, 90)->insert($this->dir . '/.thumbs/' . $name);
                 }
             }
             header('Location: /fastleo/filemanager?' . request()->getQueryString());
