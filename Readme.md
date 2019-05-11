@@ -2,13 +2,6 @@
 
     composer require fastleo/fastleo
 
-****Add middleware****
-
-    protected $middleware = [
-        ...
-        \Fastleo\Fastleo\ModelsList::class,
-    ]
-
 ****Publish the package’s****
 
     php artisan vendor:publish --tag=fastleo --force
@@ -32,6 +25,7 @@
 
 ****Fastleo setting model****
     
+    public $fastleo = false;
     public $fastleo_model = [];
     public $fastleo_columns = [];
 

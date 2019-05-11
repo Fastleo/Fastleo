@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['prefix' => 'fastleo', 'middleware' => [Fastleo\Fastleo\ModelsList::class, 'web', Fastleo\Fastleo\CheckAuth::class]], function () {
+Route::group(['prefix' => 'fastleo', 'middleware' => ['web', Fastleo\Fastleo\CheckAuth::class]], function () {
 
     // Auth
     Route::match(['get', 'post'], '', 'Fastleo\Fastleo\LoginController@login')->name('fastleo');

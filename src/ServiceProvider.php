@@ -26,6 +26,8 @@ class ServiceProvider extends BaseServiceProvider
             'fastleo_composer' => json_decode(file_get_contents(__DIR__ . '/../composer.json'))
         ]);
 
+        $this->app->models = $this->appModels();
+
         // Route
         $this->loadRoutesFrom(__DIR__ . '/routes.php');
 
@@ -50,5 +52,32 @@ class ServiceProvider extends BaseServiceProvider
     public function register()
     {
         //
+    }
+
+    /**
+     * Список моделей
+     * @return array
+     */
+    public function appModels()
+    {
+        $appmodels = [];
+        foreach (scandir(base_path('app')) as $file) {
+            $pathInfo = pathinfo($file);
+            if (isset($pathInfo['extension']) and $pathInfo['extension'] == 'php') {
+                if (class_exists('App\\' . $pathInfo['filename'])) {
+                    $name = 'App\\' . $pathInfo['filename'];
+                    $app = new $name();
+                    if (isset($app->fastleo) and $app->fastleo == false) {
+                        continue;
+                    }
+                    $appmodels[strtolower($pathInfo['filename'])] = [
+                        'icon' => $app->fastleo_model['icon'] ?? null,
+                        'name' => $app->fastleo_model['name'] ?? $pathInfo['filename'],
+                        'title' => $app->fastleo_model['title'] ?? $pathInfo['filename'],
+                    ];
+                }
+            }
+        }
+        return $appmodels;
     }
 }
