@@ -13,7 +13,7 @@
 <body>
 <nav class="navbar navbar-light navbar-dark bg-dark flex-md-nowrap fastleo-nav">
     <a class="navbar-brand" href="{{ route('fastleo.info') }}">Fastleo Admin Panel</a>
-    @if(session()->has('admin'))
+    @if(session()->has('fastleo_admin'))
         <div class="pull-right">
             <a href="#" class="filemanager" data-src="/fastleo/filemanager">Файловый менеджер</a> /
             <a href="/" target="_blank">Перейти на сайт</a> /
@@ -25,7 +25,7 @@
     <div class="row">
         <div class="col-lg-2 col-md-3 col-sm-4 bg-light fastleo-menu">
             <ul class="nav flex-column">
-                @if(session()->has('admin'))
+                @if(session()->has('fastleo_admin'))
                     <li class="nav-item">
                         <a href="{{ route('fastleo.info') }}" class="nav-link"><i class="fas fa-home"></i> Информация</a>
                     </li>
@@ -51,7 +51,7 @@
                         <small>Softonline</small>
                     </a>
                     <br>
-                    <a href="https://github.com/Fastleo/Fastleo" target="_blank">
+                    <a href="https://github.com/fastleo/fastleo" target="_blank">
                         <small>Github</small>
                     </a>
                 </li>
@@ -79,7 +79,7 @@
         selector: 'textarea.tinymce',
         theme: 'modern',
         plugins: 'print preview searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount imagetools contextmenu colorpicker textpattern help code',
-        toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor removeformat | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | link image media | code',
+        toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor removeformat code | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | link image media | fontselect fontsizeselect',
         image_advtab: true,
         relative_urls: false,
         height: 300,

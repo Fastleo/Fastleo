@@ -1,0 +1,14 @@
+"require": {
+    "fastleo/fastleo": "@dev"
+},
+"repositories": [
+    {
+        "type": "path",
+        "url": "../fastleo",
+        "options": {
+            "symlink": true
+        }
+    }
+]
+
+composer update fastleo/fastleo --prefer-source

@@ -6,8 +6,7 @@
     "authors": [
         {
             "name": "Roman Zakharov",
-            "email": "camanru@gmail.com",
-            "role": "lead"
+            "email": "camanru@gmail.com"
         }
     ],
     "require": {
@@ -17,13 +16,14 @@
         "ext-fileinfo": "*",
         "league/csv": "^9.2",
         "doctrine/dbal": "^2.9",
-        "illuminate/support": "^5.7",
-        "illuminate/console": "^5.7",
-        "illuminate/filesystem": "^5.7",
-        "intervention/image": "^2.4"
+        "intervention/image": "^2.4",
+        "illuminate/support": "^5.7"
     },
     "require-dev": {
+        "illuminate/filesystem": "^5.7",
+        "illuminate/console": "^5.7",
         "illuminate/config": "^5.7",
+        "illuminate/http": "^5.7",
         "illuminate/view": "^5.7",
         "phpunit/phpunit": "^7.5"
     },

@@ -22,7 +22,7 @@ class FilemanagerController extends Controller
 
     public $files;
 
-    public $patn;
+    public $path;
 
     /**
      * FilemanagerController constructor.
@@ -68,7 +68,7 @@ class FilemanagerController extends Controller
      */
     protected function checkImage($extention)
     {
-        return (in_array(strtolower($ext), $this->images)) ? true : false;
+        return (in_array(strtolower($extention), $this->images)) ? true : false;
     }
 
     /**

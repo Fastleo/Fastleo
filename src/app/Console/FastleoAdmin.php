@@ -54,12 +54,10 @@ class FastleoAdmin extends Command
             }
         }
 
-        $user->admin = true;
+        $user->fastleo_admin = true;
+        $user->save();
 
-        if ($this->confirm("Do you want to create the user?", true)) {
-            $user->save();
-            $this->info("User created (id: {$user->id})");
-        }
+        $this->info("User created (id: {$user->id})");
 
         return true;
     }

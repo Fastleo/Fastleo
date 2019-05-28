@@ -17,11 +17,11 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         if ($request->post('email') and $request->post('password')) {
-            $user = User::where('email', $request->post('email'))->where('admin', 1)->first();
+            $user = User::where('email', $request->post('email'))->where('fastleo_admin', 1)->first();
             if (!is_null($user)) {
-                if (Hash::check($request->post('password'), $user->getAuthPassword()) and $user->admin == 1) {
+                if (Hash::check($request->post('password'), $user->getAuthPassword()) and $user->fastleo_admin == 1) {
                     $request->session()->put('id', $user->id);
-                    $request->session()->put('admin', $user->admin);
+                    $request->session()->put('fastleo_admin', $user->fastleo_admin);
                     $request->session()->save();
                     return redirect('/fastleo/info');
                 }
