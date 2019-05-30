@@ -4,36 +4,36 @@
 
     <div class="row">
 
-        <a href="?folder=&field={{ request()->input('field') }}">
-            <div class="block" style="background-image: url('/storage/fastleo/ico/folder.png');">
-                <span class="filename">..</span>
-            </div>
-        </a>
+        @if($up != 'public')
+            <a href="?folder={{ $up }}&field={{ request()->get('field') }}">
+                <div class="block" style="background-image: url({{ asset('storage/fastleo/ico/folder.png') }});">
+                    <span class="filename">..</span>
+                </div>
+            </a>
+        @endif
 
         @foreach($folders as $folder)
-            <a href="?folder=&field={{ request()->input('field') }}">
-                <div class="block" style="background-image: url('/storage/fastleo/ico/folder.png');">
-                    <span class="filename">{{ $folder }}</span>
+            <a href="?folder={{ $folder }}&field={{ request()->get('field') }}" title="{{ $folder }}">
+                <div class="block" style="background-image: url({{ asset('storage/fastleo/ico/folder.png') }});">
+                    <span class="filename">{{ \Fastleo\Fastleo\Helper::getName($folder) }}</span>
                 </div>
             </a>
         @endforeach
 
         @foreach($files as $file)
             <a href="">
-                <div class="block image" style="background-image: url('/ico/jpg.jpg');" data-url="{{ $file['url'] }}">
-                        <span class="filename">
-                            {{ $file['name'] }}
-                        </span>
+                <div class="block image" style="background-image: url({{ asset($file['preview']) }});" title="{{ $file['filename'] }}" data-url="/storage{{ substr($file['filename'], 6) }}">
+                    <span class="filename">{{ Str::limit(\Fastleo\Fastleo\Helper::getName($file['filename']), 14) }}</span>
                 </div>
             </a>
         @endforeach
-        
+
     </div>
 
-    @if(request()->input('field'))
+    @if(request()->get('field'))
         <script type="text/javascript">
             $('.image').on('click', function () {
-                window.opener.filemanager('{{ request()->input('field') }}', $(this).attr('data-url'));
+                window.opener.filemanager('{{ request()->get('field') }}', $(this).attr('data-url'));
                 window.self.close();
             });
         </script>

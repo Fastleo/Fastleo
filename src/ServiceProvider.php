@@ -29,7 +29,7 @@ class ServiceProvider extends BaseServiceProvider
         $this->app->appmodels = $this->appModels();
 
         // Route
-        $this->loadRoutesFrom(__DIR__ . '/routes.php');
+        $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
 
         // Migrations
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');

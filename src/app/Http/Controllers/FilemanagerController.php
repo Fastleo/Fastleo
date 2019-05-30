@@ -6,21 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class FilemanagerController extends Controller
 {
-    public $images = ['png', 'jpg', 'jpeg', 'gif'];
-
-    public $storage = 'public/uploads';
-
-    public $upload = '/storage/uploads';
-
-    public $folders;
-
     public $folder;
-
-    public $files;
 
     public $path;
 
@@ -28,47 +19,74 @@ class FilemanagerController extends Controller
      * FilemanagerController constructor.
      * @param Request $request
      */
-    public function __construct(Request $request)
+    public function construct(Request $request)
     {
-        // Основная директорая
-        $this->path = base_path('storage/app/' . $this->storage);
-        $this->folder = '';
+        // Текущая директорая
+        $this->folder = $request->get('folder') ?? $request->session()->get('folder') ?? config('fastleo.uploads');
+        $request->session()->put('folder', $this->folder);
+        $request->session()->save();
+
+        // Абсолютный пють к текущей директории
+        $this->path = base_path('storage/app/' . $this->folder);
 
         // Создание основной директории
         if (!is_dir($this->path)) {
-            File::makeDirectory($this->full_path, $mode = 0777, true, true);
+            File::makeDirectory($this->path, $mode = 0777, true, true);
         }
 
-        // Создание папки со зжатыми изображениями
-        if (!is_dir($this->path . '/.thumbs')) {
-            File::makeDirectory($this->path . '/.thumbs', $mode = 0777, true, true);
+        // Создание временной папки
+        if (!is_dir($this->path . '/tmp')) {
+            File::makeDirectory($this->path . '/tmp', $mode = 0777, true, true);
         }
-
-        // Все папки в директории
-        $this->folders = collect(Storage::directories('public/uploads'))->except($this->storage . '/thumbs');
-
-        // Все файлы в директории
-        $this->files = collect(Storage::files($this->storage));
     }
 
     /**
-     * Данные о расширении файла
-     * @param $filename
-     * @return mixed
+     * @return \Illuminate\Support\Collection
      */
-    protected function getExtention($filename)
+    public function getFolders()
     {
-        return pathinfo($this->dir . '/' . $filename, PATHINFO_EXTENSION);
+        return collect(Storage::directories($this->folder))->flip()->except($this->folder . '/tmp')->flip();
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function getFiles()
+    {
+        $files = Storage::files($this->folder);
+        foreach ($files as $k => $file) {
+
+            $result[$k]['filename'] = $file;
+            $result[$k]['extension'] = $this->extension($file);
+            $result[$k]['preview'] = 'storage/fastleo/ico/' . $result[$k]['extension'] . '.jpg';
+
+            if (in_array($result[$k]['extension'], config('fastleo.images'))) {
+                $tmp_filename = str_replace($this->folder, $this->folder . '/tmp', $file);
+                if (!file_exists(base_path('storage/app/' . $tmp_filename))) {
+                    Image::make(base_path('storage/app/' . $file))->resize(122, 91)->save(base_path('storage/app/' . $tmp_filename));
+                }
+                $result[$k]['preview'] = 'storage/' . substr($tmp_filename, 6);
+            }
+        }
+        return collect($result ?? []);
+    }
+
+    /**
+     * @return array
+     */
+    public function getFolderUp()
+    {
+        return collect(explode("/", $this->folder))->slice(0, -1)->implode('/');
     }
 
     /**
      * Проверка на изображение
-     * @param $extention
+     * @param $filename
      * @return bool
      */
-    protected function checkImage($extention)
+    public function extension($filename)
     {
-        return (in_array(strtolower($extention), $this->images)) ? true : false;
+        return pathinfo('storage/app/' . $filename, PATHINFO_EXTENSION);
     }
 
     /**
@@ -78,10 +96,11 @@ class FilemanagerController extends Controller
      */
     public function index(Request $request)
     {
+        $this->construct($request);
         return view('fastleo::filemanager/index', [
-            'folders' => $this->folders,
-            'images' => $this->images,
-            'files' => $this->files,
+            'folders' => $this->getFolders(),
+            'files' => $this->getFiles(),
+            'up' => $this->getFolderUp(),
         ]);
     }
 
@@ -92,18 +111,17 @@ class FilemanagerController extends Controller
      */
     public function uploads(Request $request)
     {
+        $this->construct($request);
         $files = $request->file('files');
         if (isset($files) and count($files) > 0) {
             foreach ($files as $file) {
-                $name = str_replace([' '], ['_'], $file->getClientOriginalName());
-                $file->move($this->dir, $name);
-                $ext = pathinfo($this->dir . '/' . $name, PATHINFO_EXTENSION);
-                if (in_array(strtolower($ext), $this->images)) {
-                    Image::make($this->dir . '/' . $name)->resize(120, 90)->insert($this->dir . '/.thumbs/' . $name);
+                $name = $file->getClientOriginalName();
+                $file->move($this->path, $name);
+                if (in_array(strtolower($file->getClientOriginalExtension()), config('fastleo.images'))) {
+                    Image::make($this->path . '/' . $name)->resize(122, 91)->save($this->path . '/tmp/' . $name);
                 }
             }
-            header('Location: /fastleo/filemanager?' . request()->getQueryString());
-            die;
+            return redirect(route('fastleo.filemanager') . '?' . $request->getQueryString());
         }
         return view('fastleo::filemanager/uploads');
     }
@@ -115,11 +133,12 @@ class FilemanagerController extends Controller
      */
     public function create(Request $request)
     {
+        $this->construct($request);
         if ($request->post('folder_name')) {
-            $folder_name = str_replace(' ', '_', $request->post('folder_name'));
-            File::makeDirectory(base_path('public/uploads/' . $request->get('folder') . '/' . $folder_name), 0777);
-            header('Location: /fastleo/filemanager?' . request()->getQueryString());
-            die;
+            $folder_name = Str::slug($request->post('folder_name'), '_');
+            File::makeDirectory(base_path('storage/app/' . $this->folder . '/' . $folder_name), 0777);
+            File::makeDirectory(base_path('storage/app/' . $this->folder . '/' . $folder_name . '/tmp'), 0777);
+            return redirect(route('fastleo.filemanager') . '?' . $request->getQueryString());
         }
         return view('fastleo::filemanager/create');
     }

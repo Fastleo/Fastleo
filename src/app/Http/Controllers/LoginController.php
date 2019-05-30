@@ -38,6 +38,6 @@ class LoginController extends Controller
     {
         $request->session()->flush();
         $request->session()->save();
-        return redirect('/fastleo');
+        return redirect(route('fastleo'));
     }
 }

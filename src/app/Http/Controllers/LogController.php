@@ -37,7 +37,6 @@ class LogController extends Controller
     public function clear()
     {
         file_put_contents(base_path($this->log), '');
-        header('Location: /fastleo/log');
-        die;
+        return redirect(route('fastleo.log'));
     }
 }

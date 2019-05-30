@@ -63,7 +63,6 @@ class InfoController extends Controller
         Artisan::call('cache:clear');
         Artisan::call('route:clear');
         Artisan::call('config:clear');
-        header('Location: ' . route('fastleo.info'));
-        die;
+        return redirect(route('fastleo.info'));
     }
 }
