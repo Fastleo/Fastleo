@@ -23,7 +23,7 @@ class LoginController extends Controller
                     $request->session()->put('id', $user->id);
                     $request->session()->put('fastleo_admin', $user->fastleo_admin);
                     $request->session()->save();
-                    return redirect('/fastleo/info');
+                    return redirect(route('fastleo.info'));
                 }
             }
         }

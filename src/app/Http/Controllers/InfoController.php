@@ -31,7 +31,7 @@ class InfoController extends Controller
 
         $params[] = [
             'title' => 'Версия Fastleo',
-            'value' => Config::get('fastleo_composer')->version
+            'value' => config('fastleo_composer')->version
         ];
 
         $params[] = [
@@ -62,6 +62,7 @@ class InfoController extends Controller
     {
         Artisan::call('cache:clear');
         Artisan::call('route:clear');
+        Artisan::call('view:clear');
         Artisan::call('config:clear');
         return redirect(route('fastleo.info'));
     }
