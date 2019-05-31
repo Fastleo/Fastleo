@@ -1,9 +1,9 @@
 <?php
 
-Route::group(['prefix' => 'fastleo', 'middleware' => ['web', Fastleo\Fastleo\CheckAuth::class]], function () {
+Route::group(['prefix' => 'fastleo', 'middleware' => ['web']], function () {
 
     // Auth
-    Route::any('/', 'Fastleo\Fastleo\LoginController@login')->name('fastleo');
+    Route::any('/', 'Fastleo\Fastleo\LoginController@login')->name('fastleo.login');
     Route::get('/logout', 'Fastleo\Fastleo\LoginController@logout')->name('fastleo.logout');
 
     // Info

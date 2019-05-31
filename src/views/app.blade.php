@@ -13,19 +13,19 @@
 <body>
 <nav class="navbar navbar-light navbar-dark bg-dark flex-md-nowrap fastleo-nav">
     <a class="navbar-brand" href="{{ route('fastleo.info') }}">Fastleo Admin Panel</a>
-    @if(session()->has('fastleo_admin'))
+    @auth
         <div class="pull-right">
             <a href="#" class="filemanager" data-src="/fastleo/filemanager">Файловый менеджер</a> /
             <a href="/" target="_blank">Перейти на сайт</a> /
             <a href="{{ route('fastleo.logout') }}">Выйти</a>
         </div>
-    @endif
+    @endauth
 </nav>
 <div class="container-fluid fastleo-container">
     <div class="row">
         <div class="col-lg-2 col-md-3 col-sm-4 bg-light fastleo-menu">
             <ul class="nav flex-column">
-                @if(session()->has('fastleo_admin'))
+                @auth
                     <li class="nav-item">
                         <a href="{{ route('fastleo.info') }}" class="nav-link"><i class="fas fa-home"></i> Информация</a>
                     </li>
@@ -41,7 +41,7 @@
                             </a>
                         </li>
                     @endforeach
-                @endif
+                @endauth
                 <li class="nav-item">
                     <br>
                     <a href="https://softonline.org" target="_blank">
@@ -55,7 +55,23 @@
             </ul>
         </div>
         <div class="col-lg-10 col-md-9 col-sm-8 fastleo-content">
-            @yield('content')
+            @auth
+                @yield('content')
+            @endauth
+            @guest
+                <form action="{{ route('fastleo.login') }}" method="post" class="col-lg-4 col-md-6 col-sm-8 col-xs-12">
+                    {{ csrf_field() }}
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input type="email" name="email" class="form-control" id="email" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Войти</button>
+                </form>
+            @endguest
         </div>
     </div>
 </div>

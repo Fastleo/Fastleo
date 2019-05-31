@@ -5,7 +5,8 @@ namespace Fastleo\Fastleo;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class LoginController extends Controller
 {
@@ -16,17 +17,17 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-        if ($request->post('email') and $request->post('password')) {
-            $user = User::where('email', $request->post('email'))->where('fastleo_admin', 1)->first();
-            if (!is_null($user)) {
-                if (Hash::check($request->post('password'), $user->getAuthPassword()) and $user->fastleo_admin == 1) {
-                    $request->session()->put('id', $user->id);
-                    $request->session()->put('fastleo_admin', $user->fastleo_admin);
-                    $request->session()->save();
-                    return redirect(route('fastleo.info'));
-                }
-            }
+        // Аутентификация
+        if (Auth::attempt([
+            'email' => $request->post('email'),
+            'password' => $request->post('password'),
+            'fastleo_admin' => true,
+        ], true)) {
+            // успешна
+            Auth::login(Auth::user(), true);
+            return redirect(route('fastleo.info'));
         }
+
         return view('fastleo::login');
     }
 
@@ -36,8 +37,7 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        $request->session()->flush();
-        $request->session()->save();
-        return redirect(route('fastleo'));
+        Auth::logout();
+        return redirect(route('fastleo.login'));
     }
 }

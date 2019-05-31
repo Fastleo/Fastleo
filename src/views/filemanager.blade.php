@@ -10,24 +10,26 @@
     <link rel="stylesheet" href="{{ asset('storage/fastleo/css/filemanager.css') }}">
 </head>
 <body>
-<nav class="navbar navbar-light navbar-dark bg-dark flex-md-nowrap fastleo-nav">
-    <a href="{{ route('fastleo.filemanager') }}" class="navbar-brand">Fastleo Filemanager</a>
-    <div class="pull-center">
-        /storage{{ substr(session()->get('folder') ?? '', 6) }}
-    </div>
-    <div class="pull-right">
-        <a href="{{ route('fastleo.filemanager.uploads') }}?folder={{ request()->get('folder') ?? '' }}&field={{ request()->get('field') ?? '' }}">Загрузить файл</a> /
-        <a href="{{ route('fastleo.filemanager.create') }}?folder={{ request()->get('folder') ?? '' }}&field={{ request()->get('field') ?? '' }}">Создать папку</a>
-    </div>
-</nav>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col">
-            @yield('content')
+@auth
+    <nav class="navbar navbar-light navbar-dark bg-dark flex-md-nowrap fastleo-nav">
+        <a href="{{ route('fastleo.filemanager') }}" class="navbar-brand">Fastleo Filemanager</a>
+        <div class="pull-center">
+            /storage{{ substr(session()->get('folder') ?? '', 6) }}
+        </div>
+        <div class="pull-right">
+            <a href="{{ route('fastleo.filemanager.uploads') }}?folder={{ request()->get('folder') ?? '' }}&field={{ request()->get('field') ?? '' }}">Загрузить файл</a> /
+            <a href="{{ route('fastleo.filemanager.create') }}?folder={{ request()->get('folder') ?? '' }}&field={{ request()->get('field') ?? '' }}">Создать папку</a>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                @yield('content')
+            </div>
         </div>
     </div>
-</div>
-<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>
-<script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+@endauth
 </body>
 </html>
