@@ -35,8 +35,8 @@ class FilemanagerController extends Controller
         }
 
         // Создание временной папки
-        if (!is_dir($this->path . '/tmp')) {
-            File::makeDirectory($this->path . '/tmp', $mode = 0777, true, true);
+        if (!is_dir($this->path . '/thumbs')) {
+            File::makeDirectory($this->path . '/thumbs', $mode = 0777, true, true);
         }
     }
 
@@ -45,7 +45,7 @@ class FilemanagerController extends Controller
      */
     public function getFolders()
     {
-        return collect(Storage::directories($this->folder))->flip()->except($this->folder . '/tmp')->flip();
+        return collect(Storage::directories($this->folder))->flip()->except($this->folder . '/thumbs')->flip();
     }
 
     /**
@@ -61,7 +61,7 @@ class FilemanagerController extends Controller
             $result[$k]['preview'] = 'storage/fastleo/ico/' . $result[$k]['extension'] . '.jpg';
 
             if (in_array($result[$k]['extension'], config('fastleo.images'))) {
-                $tmp_filename = str_replace($this->folder, $this->folder . '/tmp', $file);
+                $tmp_filename = str_replace($this->folder, $this->folder . '/thumbs', $file);
                 if (!file_exists(base_path('storage/app/' . $tmp_filename))) {
                     Image::make(base_path('storage/app/' . $file))->resize(122, 91)->save(base_path('storage/app/' . $tmp_filename));
                 }
@@ -118,7 +118,7 @@ class FilemanagerController extends Controller
                 $name = $file->getClientOriginalName();
                 $file->move($this->path, $name);
                 if (in_array(strtolower($file->getClientOriginalExtension()), config('fastleo.images'))) {
-                    Image::make($this->path . '/' . $name)->resize(122, 91)->save($this->path . '/tmp/' . $name);
+                    Image::make($this->path . '/' . $name)->resize(122, 91)->save($this->path . '/thumbs/' . $name);
                 }
             }
             return redirect(route('fastleo.filemanager') . '?' . $request->getQueryString());
@@ -137,7 +137,7 @@ class FilemanagerController extends Controller
         if ($request->post('folder_name')) {
             $folder_name = Str::slug($request->post('folder_name'), '_');
             File::makeDirectory(base_path('storage/app/' . $this->folder . '/' . $folder_name), 0777);
-            File::makeDirectory(base_path('storage/app/' . $this->folder . '/' . $folder_name . '/tmp'), 0777);
+            File::makeDirectory(base_path('storage/app/' . $this->folder . '/' . $folder_name . '/thumbs'), 0777);
             return redirect(route('fastleo.filemanager') . '?' . $request->getQueryString());
         }
         return view('fastleo::filemanager/create');

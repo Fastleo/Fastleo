@@ -10,10 +10,6 @@ Route::group(['prefix' => 'fastleo', 'middleware' => ['web', Fastleo\Fastleo\Che
     Route::get('/info', 'Fastleo\Fastleo\InfoController@index')->name('fastleo.info');
     Route::get('/info/clear', 'Fastleo\Fastleo\InfoController@clear')->name('fastleo.info.clear');
 
-    // Log
-    Route::get('/log', 'Fastleo\Fastleo\LogController@index')->name('fastleo.log');
-    Route::get('/log/clear', 'Fastleo\Fastleo\LogController@clear')->name('fastleo.log.clear');
-
     // Filemanager
     Route::get('/filemanager', 'Fastleo\Fastleo\FilemanagerController@index')->name('fastleo.filemanager');
     Route::any('/filemanager/create', 'Fastleo\Fastleo\FilemanagerController@create')->name('fastleo.filemanager.create');

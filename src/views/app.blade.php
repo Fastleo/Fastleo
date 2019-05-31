@@ -41,9 +41,6 @@
                             </a>
                         </li>
                     @endforeach
-                    <li class="nav-item">
-                        <a href="{{ route('fastleo.log') }}" class="nav-link"><i class="fas fa-exclamation-triangle"></i> Laravel log</a>
-                    </li>
                 @endif
                 <li class="nav-item">
                     <br>
