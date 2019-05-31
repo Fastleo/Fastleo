@@ -29,6 +29,9 @@
                     <li class="nav-item">
                         <a href="{{ route('fastleo.info') }}" class="nav-link"><i class="fas fa-home"></i> Информация</a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('fastleo.users') }}" class="nav-link"><i class="fas fa-users"></i> Пользователи</a>
+                    </li>
                     @foreach(app()->appmodels as $model)
                         <li class="nav-item">
                             <a class="nav-link {{ request()->is('fastleo/app/'. strtolower($model['name'])) ? 'active' : '' }}" href="/fastleo/app/{{ strtolower($model['name']) }}">

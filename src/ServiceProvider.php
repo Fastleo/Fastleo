@@ -64,7 +64,7 @@ class ServiceProvider extends BaseServiceProvider
         foreach (scandir(base_path('app')) as $file) {
             $pathInfo = pathinfo($file);
             if (isset($pathInfo['extension']) and $pathInfo['extension'] == 'php') {
-                if (class_exists('App\\' . $pathInfo['filename'])) {
+                if ($pathInfo['filename'] != 'User' and class_exists('App\\' . $pathInfo['filename'])) {
                     $name = 'App\\' . $pathInfo['filename'];
                     $app = new $name();
                     if (isset($app->fastleo) and $app->fastleo == false) {
