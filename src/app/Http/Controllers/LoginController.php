@@ -28,6 +28,10 @@ class LoginController extends Controller
             return redirect(route('fastleo.info'));
         }
 
+        if(Auth::id()) {
+            return redirect(route('fastleo.info'));
+        }
+
         return view('fastleo::login');
     }
 
