@@ -129,16 +129,8 @@
         });
 
         $('input[name=import]').on('change', function () {
-            var warning = "ВНИМАНИЕ!\n\n" +
-                "Проверьте, что файл сохранен в формате CSV UTF-8 (разделитель - запятая)\n" +
-                "Используйте для этого Office 2016\n\n" +
-                "Все данные будут перезаписаны данными из файла " + $(this).val();
-            if (confirm(warning)) {
-                $('#form').submit();
-            } else {
-                window.location.reload();
-                return false;
-            }
+            $('#form').submit();
+            return false;
         });
 
         $('.addInput').on('click', function () {

@@ -6,9 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
-use League\Csv\CharsetConverter;
-use League\Csv\Writer;
-use League\Csv\Reader;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ModelController extends Controller
 {
@@ -581,17 +579,8 @@ class ModelController extends Controller
      */
     public function rowsExport(Request $request)
     {
-        $csv = Writer::createFromFileObject(new \SplTempFileObject());
-        $csv->setDelimiter(';');
-        $csv->insertOne(array_diff($this->schema, $this->app->getHidden()));
-        if ($request->get('search')) {
-            $csv->insertAll($this->search($request->get('search'))->orderBy('id')->get()->toArray());
-        } else {
-            $csv->insertAll($this->app::orderBy('id')->get()->toArray());
-        }
-        $csv->setOutputBOM(Writer::BOM_UTF8);
-        $csv->output($this->table . '_' . date("Y_m_d_His") . '.csv');
-        die;
+        $export = new Export($this->app, $this->schema);
+        return Excel::download($export, $this->table . '_' . date("YmdHis") . '.xlsx');
     }
 
     /**
@@ -602,72 +591,8 @@ class ModelController extends Controller
      */
     public function rowsImport(Request $request, $model)
     {
-        // Разделитель
-        $delimiter = ';';
-
-        // Загрузка файла на сервер
-        $file = $request->file('import');
-        $name = str_replace([' '], ['_'], $file->getClientOriginalName());
-        $file->move(base_path('storage/framework/cache'), $name);
-        $csv_file = 'storage/framework/cache/' . $name;
-
-        // Расширение файла
-        $mime = finfo_file(finfo_open(FILEINFO_MIME_TYPE), base_path($csv_file));
-
-        // Проверка разделителя
-        $csv_open = fopen(base_path($csv_file), 'r');
-        $csv_data = fgets($csv_open, 4096);
-        fseek($csv_open, 0);
-
-        // Разделитель табуляция
-        if (strpos($csv_data, "\t") !== false) {
-            $delimiter = "\t";
-        }
-
-        // читаем данные из csv
-        if ($mime == 'text/plain') {
-
-            $csv = Reader::createFromPath(base_path($csv_file), 'r');
-            $csv->setDelimiter($delimiter);
-            $csv->setHeaderOffset(0);
-            $records = $csv->getRecords();
-
-            // Возможно есть новые столбцы
-            $new_columns = array_diff($csv->getHeader(), $this->getColumns());
-            if (count($new_columns) > 0) {
-                Schema::table($this->table, function (Blueprint $table) use ($new_columns) {
-                    foreach ($new_columns as $new_column) {
-                        $table->string($new_column)->nullable();
-                    }
-                });
-            }
-
-            // Обновляем или вставляем запись
-            foreach ($records as $row) {
-                if (isset($row['id']) and is_numeric($row['id']) and !is_null($this->app::where('id', $row['id'])->first())) {
-                    if (isset($row['updated_at'])) {
-                        $row['updated_at'] = \Carbon\Carbon::now();
-                    }
-                    $row = $this->nullForeach($row);
-                    $this->app::where('id', $row['id'])->update($row);
-                } else {
-                    if (isset($row['created_at'])) {
-                        $row['created_at'] = \Carbon\Carbon::now();
-                    }
-                    if (isset($row['updated_at'])) {
-                        $row['updated_at'] = \Carbon\Carbon::now();
-                    }
-                    if (isset($this->columns['sort'])) {
-                        $row['sort'] = $this->app::count() + 1;
-                    }
-                    if (isset($this->columns['menu'])) {
-                        $row['menu'] = 1;
-                    }
-                    $row = $this->unsetForeach($row, ['id']);
-                    $this->app::insert($row);
-                }
-            }
-        }
+        $import = new Import($this->app, $this->schema);
+        Excel::import($import, $request->file('import'));
 
         header('Location: /fastleo/app/' . $model . '?' . $request->getQueryString());
         die;

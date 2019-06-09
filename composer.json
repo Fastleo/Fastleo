@@ -14,17 +14,13 @@
         "ext-gd": "*",
         "ext-json": "*",
         "ext-fileinfo": "*",
-        "league/csv": "^9.2",
         "doctrine/dbal": "^2.9",
         "intervention/image": "^2.4",
-        "illuminate/support": "^5.7"
+        "phpoffice/phpspreadsheet": "^1.7",
+        "maatwebsite/excel": "^3.1"
     },
     "require-dev": {
-        "illuminate/filesystem": "^5.7",
-        "illuminate/console": "^5.7",
-        "illuminate/config": "^5.7",
-        "illuminate/http": "^5.7",
-        "illuminate/view": "^5.7",
+        "laravel/framework": "5.8.*",
         "phpunit/phpunit": "^7.5"
     },
     "autoload": {
