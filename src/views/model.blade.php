@@ -26,14 +26,16 @@
                 <div class="dropdown-menu">
                     @if(!isset($model_columns['menu']))
                         <a class="dropdown-item" href="/fastleo/app/{{ $model_name }}/menu_add">Добавить видимость</a>
+                    @else
+                        <a class="dropdown-item" href="/fastleo/app/{{ $model_name }}/menu_on">Включить все</a>
+                        <a class="dropdown-item" href="/fastleo/app/{{ $model_name }}/menu_off">Выключить все</a>
                     @endif
-                    <a class="dropdown-item" href="/fastleo/app/{{ $model_name }}/menu_on">Включить все</a>
-                    <a class="dropdown-item" href="/fastleo/app/{{ $model_name }}/menu_off">Выключить все</a>
                     <div class="dropdown-divider"></div>
                     @if(!isset($model_columns['sort']))
                         <a class="dropdown-item" href="/fastleo/app/{{ $model_name }}/sorting_add">Добавить сортировку</a>
+                    @else
+                        <a class="dropdown-item" href="/fastleo/app/{{ $model_name }}/sorting_fix">Исправить сортировку</a>
                     @endif
-                    <a class="dropdown-item" href="/fastleo/app/{{ $model_name }}/sorting_fix">Исправить сортировку</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="/fastleo/app/{{ $model_name }}/rows_export?{{ request()->getQueryString() }}" download>Экспортировать данные</a>
                     <a class="dropdown-item" href="" id="import">Импортировать данные</a>
@@ -72,7 +74,7 @@
                             @if(isset($row->sort))
                                 <a href="/fastleo/app/{{ $model_name }}/up/{{ $row->id }}?{{ request()->getQueryString() }}"><i class="fas fa-arrow-up fa-xs"></i></a>
                             @endif
-                            @if(isset($row->menu))
+                            @if(isset($row->menu) or is_null($row->menu))
                                 <a href="/fastleo/app/{{ $model_name }}/menu/{{ $row->id }}?{{ request()->getQueryString() }}" style="color:{{ $row->menu == 1 ? 'green' : 'red' }}"><i class="far fa-dot-circle fa-xs"></i></a>
                             @endif
                             @if(isset($row->sort))

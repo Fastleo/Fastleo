@@ -533,7 +533,7 @@ class ModelController extends Controller
     {
         if (!isset($this->columns['menu'])) {
             Schema::table($this->table, function (Blueprint $table) {
-                $table->integer('menu')->after('id')->default('1');
+                $table->integer('menu')->after('id')->nullable()->default('1');
             });
         }
         header('Location: /fastleo/app/' . $model . '?' . $request->getQueryString());
