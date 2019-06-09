@@ -71,13 +71,13 @@
                 @foreach($rows as $row)
                     <tr>
                         <td>
-                            @if(isset($row->sort))
+                            @if(array_key_exists('sort', $model_columns))
                                 <a href="/fastleo/app/{{ $model_name }}/up/{{ $row->id }}?{{ request()->getQueryString() }}"><i class="fas fa-arrow-up fa-xs"></i></a>
                             @endif
-                            @if(isset($row->menu) or is_null($row->menu))
+                            @if(array_key_exists('menu', $model_columns))
                                 <a href="/fastleo/app/{{ $model_name }}/menu/{{ $row->id }}?{{ request()->getQueryString() }}" style="color:{{ $row->menu == 1 ? 'green' : 'red' }}"><i class="far fa-dot-circle fa-xs"></i></a>
                             @endif
-                            @if(isset($row->sort))
+                            @if(array_key_exists('sort', $model_columns))
                                 <a href="/fastleo/app/{{ $model_name }}/down/{{ $row->id }}?{{ request()->getQueryString() }}"><i class="fas fa-arrow-down fa-xs"></i></a>
                             @endif
                         </td>
