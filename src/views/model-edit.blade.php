@@ -64,7 +64,7 @@
                                     <label class="col-sm-2 col-form-label" for="{{ $c }}">@if(isset($f[$c]['title'])){{ $f[$c]['title'] }}@else{{ ucfirst($c) }}@endif:</label>
                                     <div class="col-sm-9">
                                         <select class="form-control select2" id="{{ $c }}" @if(isset($f[$c]['multiple'])) name="{{ $c }}[]" multiple @else name="{{ $c }}" @endif @if(isset($f[$c]['disabled']) and $f[$c]['disabled'] == true){{ 'disabled' }}@endif @if(isset($f[$c]['required']) and $f[$c]['required'] == true){{ 'required' }}@endif>
-                                            <option value=""></option>
+                                            <option value="0">---</option>
                                             @if($f[$c]['data'] and is_array($f[$c]['data']))
                                                 @foreach($f[$c]['data'] as $k => $v)
                                                     @php isset($f[$c]['key']) ? $value = $k : $value = $v; @endphp
