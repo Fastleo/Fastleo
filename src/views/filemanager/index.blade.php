@@ -23,7 +23,7 @@
         @foreach($files as $file)
             <a href="">
                 <div class="block image" style="background-image: url({{ asset($file['preview']) }});" title="{{ $file['filename'] }}" data-url="/storage{{ substr($file['filename'], 6) }}">
-                    <span class="filename">{{ Str::limit(\Fastleo\Fastleo\Helper::getName($file['filename']), 14) }}</span>
+                    <span class="filename">{{ Illuminate\Support\Str::limit(\Fastleo\Fastleo\Helper::getName($file['filename']), 14) }}</span>
                 </div>
             </a>
         @endforeach
