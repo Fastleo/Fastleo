@@ -13,8 +13,8 @@ Route::group(['prefix' => 'fastleo', 'middleware' => ['web']], function () {
     // Users
     Route::get('/users', 'Fastleo\Fastleo\UserController@users')->name('fastleo.users');
     Route::any('/users/add', 'Fastleo\Fastleo\UserController@add')->name('fastleo.users.add');
-    Route::any('/users/edit/{user_id}', 'Fastleo\Fastleo\UserController@edit')->name('fastleo.users.edit');
-    Route::get('/users/delete/{user_id}', 'Fastleo\Fastleo\UserController@delete')->name('fastleo.users.delete');
+    Route::any('/users/edit/{user_id}', 'Fastleo\Fastleo\UserController@edit')->where('user_id', '[0-9]+')->name('fastleo.users.edit');
+    Route::get('/users/delete/{user_id}', 'Fastleo\Fastleo\UserController@delete')->where('user_id', '[0-9]+')->name('fastleo.users.delete');
 
     // Filemanager
     Route::get('/filemanager', 'Fastleo\Fastleo\FilemanagerController@index')->name('fastleo.filemanager');
