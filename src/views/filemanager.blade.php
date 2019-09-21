@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{{ asset('storage/fastleo/css/filemanager.css') }}">
 </head>
 <body>
-@auth
+@if(session()->has('fastleo'))
     <nav class="navbar navbar-light navbar-dark bg-dark flex-md-nowrap fastleo-nav">
         <a href="{{ route('fastleo.filemanager') }}" class="navbar-brand">Fastleo Filemanager</a>
         <div class="pull-center">
@@ -30,6 +30,6 @@
     </div>
     <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>
     <script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-@endauth
+@endif
 </body>
 </html>

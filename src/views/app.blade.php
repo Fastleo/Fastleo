@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Fastleo Admin Panel</title>
     <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.11.1/css/all.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css">
     <link rel="stylesheet" href="{{ asset('storage/fastleo/css/admin.css') }}">
@@ -13,19 +13,19 @@
 <body>
 <nav class="navbar navbar-light navbar-dark bg-dark flex-md-nowrap fastleo-nav">
     <a class="navbar-brand" href="{{ route('fastleo.info') }}">Fastleo Admin Panel</a>
-    @auth
+    @if(session()->has('fastleo'))
         <div class="pull-right">
             <a href="#" class="filemanager" data-src="/fastleo/filemanager">Файловый менеджер</a> /
             <a href="/" target="_blank">Перейти на сайт</a> /
             <a href="{{ route('fastleo.logout') }}">Выйти</a>
         </div>
-    @endauth
+    @endif
 </nav>
 <div class="container-fluid fastleo-container">
     <div class="row">
         <div class="col-lg-2 col-md-3 col-sm-4 bg-light fastleo-menu">
             <ul class="nav flex-column">
-                @auth
+                @if(session()->has('fastleo'))
                     <li class="nav-item">
                         <a href="{{ route('fastleo.info') }}" class="nav-link"><i class="fas fa-home"></i> Информация</a>
                     </li>
@@ -44,7 +44,7 @@
                             </a>
                         </li>
                     @endforeach
-                @endauth
+                @endif
                 <li class="nav-item">
                     <br>
                     <a href="https://softonline.org" target="_blank">
@@ -58,10 +58,9 @@
             </ul>
         </div>
         <div class="col-lg-10 col-md-9 col-sm-8 fastleo-content">
-            @auth
+            @if(session()->has('fastleo'))
                 @yield('content')
-            @endauth
-            @guest
+            @else
                 <form action="{{ route('fastleo.login') }}" method="post" class="col-lg-4 col-md-6 col-sm-8 col-xs-12">
                     {{ csrf_field() }}
                     <div class="form-group">
@@ -74,7 +73,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Войти</button>
                 </form>
-            @endguest
+            @endif
         </div>
     </div>
 </div>
@@ -82,7 +81,7 @@
 <script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>
 <script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.9.4/tinymce.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.9.6/tinymce.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
 
