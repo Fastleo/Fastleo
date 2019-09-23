@@ -83,8 +83,8 @@
                                 </div>
                                 <hr>
                             @elseif(isset($f[$c]['type']) and in_array($f[$c]['type'], ['include']))
-                                @if(isset($row) and count($row->{$c}()->get()) > 0)
-                                    @php $include = $row->{$c}()->get() @endphp
+                                @if(isset($row) and count($row->{\Fastleo\Fastleo\Helper::str2class($c)}()->get()) > 0)
+                                    @php $include = $row->{\Fastleo\Fastleo\Helper::str2class($c)}()->get() @endphp
                                     @php $string = substr($c, 0, -1) @endphp
                                     @foreach($include as $v)
                                         <div class="form-group row">
