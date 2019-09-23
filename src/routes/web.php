@@ -22,19 +22,19 @@ Route::group(['prefix' => 'fastleo', 'middleware' => ['web']], function () {
     Route::any('/filemanager/uploads', 'Fastleo\Fastleo\FilemanagerController@uploads')->name('fastleo.filemanager.uploads');
 
     // Models
-    Route::get('/app/{model}', 'Fastleo\Fastleo\ModelController@index');
-    Route::any('/app/{model}/add', 'Fastleo\Fastleo\ModelController@add');
-    Route::get('/app/{model}/menu_on', 'Fastleo\Fastleo\ModelController@menuOn');
-    Route::get('/app/{model}/menu_off', 'Fastleo\Fastleo\ModelController@menuOff');
-    Route::get('/app/{model}/menu_add', 'Fastleo\Fastleo\ModelController@menuAdd');
-    Route::get('/app/{model}/sorting_fix', 'Fastleo\Fastleo\ModelController@sortingFix');
-    Route::get('/app/{model}/sorting_add', 'Fastleo\Fastleo\ModelController@sortingAdd');
-    Route::get('/app/{model}/rows_export', 'Fastleo\Fastleo\ModelController@rowsExport');
-    Route::any('/app/{model}/rows_import', 'Fastleo\Fastleo\ModelController@rowsImport');
-    Route::get('/app/{model}/up/{row_id}', 'Fastleo\Fastleo\ModelController@up')->where('row_id', '[0-9]+');
-    Route::get('/app/{model}/down/{row_id}', 'Fastleo\Fastleo\ModelController@down')->where('row_id', '[0-9]+');
-    Route::get('/app/{model}/menu/{row_id}', 'Fastleo\Fastleo\ModelController@menu')->where('row_id', '[0-9]+');
-    Route::any('/app/{model}/edit/{row_id}', 'Fastleo\Fastleo\ModelController@edit')->where('row_id', '[0-9]+');
-    Route::get('/app/{model}/delete/{row_id}', 'Fastleo\Fastleo\ModelController@delete')->where('row_id', '[0-9]+');
+    Route::get('/app/{model}', 'Fastleo\Fastleo\ModelController@index')->name('fastleo.model');
+    Route::any('/app/{model}/add', 'Fastleo\Fastleo\ModelController@add')->name('fastleo.model.add');
+    Route::get('/app/{model}/menu_on', 'Fastleo\Fastleo\ModelController@menuOn')->name('fastleo.model.menu_on');
+    Route::get('/app/{model}/menu_off', 'Fastleo\Fastleo\ModelController@menuOff')->name('fastleo.model.menu_off');
+    Route::get('/app/{model}/menu_add', 'Fastleo\Fastleo\ModelController@menuAdd')->name('fastleo.model.menu_add');
+    Route::get('/app/{model}/sorting_fix', 'Fastleo\Fastleo\ModelController@sortingFix')->name('fastleo.model.sorting_fix');
+    Route::get('/app/{model}/sorting_add', 'Fastleo\Fastleo\ModelController@sortingAdd')->name('fastleo.model.sorting_add');
+    Route::get('/app/{model}/rows_export', 'Fastleo\Fastleo\ModelController@rowsExport')->name('fastleo.model.rows_export');
+    Route::any('/app/{model}/rows_import', 'Fastleo\Fastleo\ModelController@rowsImport')->name('fastleo.model.rows_import');
+    Route::get('/app/{model}/up/{row_id}', 'Fastleo\Fastleo\ModelController@up')->where('row_id', '[0-9]+')->name('fastleo.model.up');
+    Route::get('/app/{model}/down/{row_id}', 'Fastleo\Fastleo\ModelController@down')->where('row_id', '[0-9]+')->name('fastleo.model.down');
+    Route::get('/app/{model}/menu/{row_id}', 'Fastleo\Fastleo\ModelController@menu')->where('row_id', '[0-9]+')->name('fastleo.model.menu');
+    Route::any('/app/{model}/edit/{row_id}', 'Fastleo\Fastleo\ModelController@edit')->where('row_id', '[0-9]+')->name('fastleo.model.edit');
+    Route::get('/app/{model}/delete/{row_id}', 'Fastleo\Fastleo\ModelController@delete')->where('row_id', '[0-9]+')->name('fastleo.model.delete');
 
 });

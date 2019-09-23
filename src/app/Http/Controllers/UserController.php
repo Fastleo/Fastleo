@@ -26,7 +26,7 @@ class UserController extends Controller
             $user->fastleo_admin = $request->get('fastleo_admin');
             $user->password = Hash::make($request->get('password'));
             $user->save();
-            return redirect(route('fastleo.users.edit', ['id' => $user->id]) . '?' . $request->getQueryString());
+            return redirect(route('fastleo.users.edit', [$user->id]) . '?' . $request->getQueryString());
         }
         return view('fastleo::users-edit');
     }

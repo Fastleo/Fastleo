@@ -408,7 +408,7 @@ class ModelController extends Controller
             $this->app->where('sort', '>', $row->sort)->decrement('sort');
         }
         $this->app->where('id', $row_id)->delete();
-        header('Location: /fastleo/app/' . $model . '?' . $request->getQueryString());
+        header('Location: ' . route('fastleo.model', [$model]) . '?' . $request->getQueryString());
         die;
     }
 
@@ -429,7 +429,7 @@ class ModelController extends Controller
             'menu' => $menu
         ]);
 
-        header('Location: /fastleo/app/' . $model . '?' . $request->getQueryString());
+        header('Location: ' . route('fastleo.model', [$model]) . '?' . $request->getQueryString());
         die;
     }
 
@@ -441,22 +441,25 @@ class ModelController extends Controller
      */
     public function up(Request $request, $model, $row_id)
     {
-        $current = $this->app::where('id', $row_id);
+        $current = $this->app::whereId($row_id);
         $current_sort = $current->first();
 
-        $prev = $this->app::where('sort', '<', $current_sort->sort)->orderBy('sort', 'desc');
-        $prev_sort = $prev->first();
+        if (is_null($current_sort->sort)) {
+            $this->sortingFix($request, $model);
+        }
 
-        if (!is_null($prev_sort)) {
+        $prev = $this->app::where('sort', '<', $current_sort->sort)->orderBy('sort', 'desc')->first();
+
+        if (!is_null($prev)) {
             $current->update([
-                'sort' => $prev_sort->sort
+                'sort' => $prev->sort
             ]);
-            $this->app::where('id', $prev_sort->id)->update([
+            $this->app::whereId($prev->id)->update([
                 'sort' => $current_sort->sort
             ]);
         }
 
-        header('Location: /fastleo/app/' . $model . '?' . $request->getQueryString());
+        header('Location: ' . route('fastleo.model', [$model]) . '?' . $request->getQueryString());
         die;
     }
 
@@ -468,22 +471,25 @@ class ModelController extends Controller
      */
     public function down(Request $request, $model, $row_id)
     {
-        $current = $this->app::where('id', $row_id);
+        $current = $this->app::whereId($row_id);
         $current_sort = $current->first();
 
-        $next = $this->app::where('sort', '>', $current_sort->sort)->orderBy('sort', 'asc');
-        $next_sort = $next->first();
+        if (is_null($current_sort->sort)) {
+            $this->sortingFix($request, $model);
+        }
 
-        if (!is_null($next_sort)) {
+        $next = $this->app::where('sort', '>', $current_sort->sort)->orderBy('sort', 'asc')->first();
+
+        if (!is_null($next)) {
             $current->update([
-                'sort' => $next_sort->sort
+                'sort' => $next->sort
             ]);
-            $this->app::where('id', $next_sort->id)->update([
+            $this->app::whereId($next->id)->update([
                 'sort' => $current_sort->sort
             ]);
         }
 
-        header('Location: /fastleo/app/' . $model . '?' . $request->getQueryString());
+        header('Location: ' . route('fastleo.model', [$model]) . '?' . $request->getQueryString());
         die;
     }
 
@@ -520,7 +526,7 @@ class ModelController extends Controller
                 $sort++;
             }
         }
-        header('Location: /fastleo/app/' . $model . '?' . $request->getQueryString());
+        header('Location: ' . route('fastleo.model', [$model]) . '?' . $request->getQueryString());
         die;
     }
 
@@ -536,7 +542,7 @@ class ModelController extends Controller
                 $table->integer('menu')->after('id')->nullable()->default('1');
             });
         }
-        header('Location: /fastleo/app/' . $model . '?' . $request->getQueryString());
+        header('Location: ' . route('fastleo.model', [$model]) . '?' . $request->getQueryString());
         die;
     }
 
@@ -552,7 +558,7 @@ class ModelController extends Controller
                 'menu' => 1
             ]);
         }
-        header('Location: /fastleo/app/' . $model . '?' . $request->getQueryString());
+        header('Location: ' . route('fastleo.model', [$model]) . '?' . $request->getQueryString());
         die;
     }
 
@@ -568,33 +574,34 @@ class ModelController extends Controller
                 'menu' => 0
             ]);
         }
-        header('Location: /fastleo/app/' . $model . '?' . $request->getQueryString());
+        header('Location: ' . route('fastleo.model', [$model]) . '?' . $request->getQueryString());
         die;
     }
 
     /**
      * Export rows
-     * @throws \League\Csv\CannotInsertRecord
-     * @throws \League\Csv\Exception
+     * @param Request $request
+     * @return \Maatwebsite\Excel\BinaryFileResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public function rowsExport(Request $request)
     {
         $export = new Export($this->app, $this->schema);
-        return Excel::download($export, $this->table . '_' . date("YmdHis") . '.xlsx');
+        return \Maatwebsite\Excel\Facades\Excel::download($export, $this->table . '_' . date("YmdHis") . '.xlsx');
     }
 
     /**
      * Import rows
      * @param Request $request
      * @param $model
-     * @throws \League\Csv\Exception
      */
     public function rowsImport(Request $request, $model)
     {
         $import = new Import($this->app, $this->schema);
-        Excel::import($import, $request->file('import'));
+        \Maatwebsite\Excel\Facades\Excel::import($import, $request->file('import'));
 
-        header('Location: /fastleo/app/' . $model . '?' . $request->getQueryString());
+        header('Location: ' . route('fastleo.model', [$model]) . '?' . $request->getQueryString());
         die;
     }
 }
