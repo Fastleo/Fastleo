@@ -58,7 +58,7 @@
                     @php $i = 1; @endphp
                     @foreach($model_columns as $c => $t)
                         @if(!isset($f[$c]['visible']) or $f[$c]['visible'] == true)
-                            @if(!in_array($t, $exclude_type) and !in_array($c, $exclude_name) and $i < 10)
+                            @if(!in_array($c, $exclude_name) and $i < 10)
                                 <th>@if(isset($f[$c]['title'])){{ $f[$c]['title'] }}@else{{ str_replace("_", " ", ucfirst($c)) }}@endif</th>
                                 @php ++$i; @endphp
                             @endif
@@ -84,7 +84,7 @@
                         @php $i = 1; @endphp
                         @foreach($model_columns as $c => $t)
                             @if(!isset($f[$c]['visible']) or $f[$c]['visible'] == true)
-                                @if(!in_array($t, $exclude_type) and !in_array($c, $exclude_name) and $i < 10)
+                                @if(!in_array($c, $exclude_name) and $i < 10)
                                     <td>
                                         <a href="/fastleo/app/{{ $model_name }}/edit/{{ $row->id }}?{{ request()->getQueryString() }}">{{ $row->{$c} }}</a>
                                     </td>

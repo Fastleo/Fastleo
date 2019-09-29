@@ -5,21 +5,21 @@ namespace Fastleo\Fastleo;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Console\Command;
 
-class FastleoAdmin extends Command
+class FastleoUser extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'fastleo:admin';
+    protected $signature = 'fastleo:user {--admin}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create new admin';
+    protected $description = 'Create new user';
 
     /**
      * @var array
@@ -54,10 +54,17 @@ class FastleoAdmin extends Command
             }
         }
 
-        $user->fastleo_admin = true;
+        $options = $this->options();
+        if ($options['admin']) {
+            $user->fastleo_admin = true;
+        }
+
         $user->save();
 
         $this->info("User created (id: {$user->id})");
+        if ($options['admin']) {
+            $this->info("User status admin");
+        }
 
         return true;
     }

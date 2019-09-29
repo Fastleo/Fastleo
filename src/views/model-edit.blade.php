@@ -21,7 +21,7 @@
                 {{ csrf_field() }}
                 @if(count($model_columns) > 0)
                     @foreach($model_columns as $c => $t)
-                        @if(!in_array($t, $exclude_type) and !in_array($c, $exclude_name))
+                        @if(!in_array($c, $exclude_name))
                             @if(in_array($t, ['text','longtext']) or (isset($f[$c]['type']) and in_array($f[$c]['type'], ['text','longtext'])))
                                 <div class="form-group row">
                                     <label class="col-sm-2 col-form-label" for="{{ $c }}">@if(isset($f[$c]['title'])){{ $f[$c]['title'] }}@else{{ ucfirst($c) }}@endif:</label>

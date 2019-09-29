@@ -33,11 +33,14 @@ class FastleoClear extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return bool
      */
     public function handle()
     {
-        @file_put_contents(base_path('storage/logs/laravel.log'), '');
+        \Artisan::call('cache:clear');
+        \Artisan::call('config:clear');
+        \Artisan::call('route:clear');
+        \Artisan::call('view:clear');
         return true;
     }
 }

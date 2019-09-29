@@ -32,7 +32,7 @@
                     <li class="nav-item">
                         <a href="{{ route('fastleo.users') }}" class="nav-link"><i class="fas fa-users"></i> Пользователи</a>
                     </li>
-                    @foreach(app()->appmodels as $model)
+                    @foreach(app()->appModels as $model)
                         <li class="nav-item">
                             <a class="nav-link {{ request()->is('fastleo/app/'. strtolower($model['name'])) ? 'active' : '' }}" href="/fastleo/app/{{ strtolower($model['name']) }}">
                                 @if(isset($model['icon']) and $model['icon'] != '')

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
-use Maatwebsite\Excel\Facades\Excel;
 
 class ModelController extends Controller
 {
@@ -16,10 +15,8 @@ class ModelController extends Controller
 
     public $exclude_get_list = ['id', '_token', 'page', 'search'];
 
-    public $exclude_list_type = ['text', 'longtext'];
     public $exclude_list_name = ['sort', 'menu', 'password', 'remember_token', 'admin'];
 
-    public $exclude_row_type = [];
     public $exclude_row_name = ['id', 'sort', 'menu', 'password', 'remember_token', 'created_at', 'updated_at'];
 
     /**
@@ -31,7 +28,7 @@ class ModelController extends Controller
         $this->name = request()->segment(3);
 
         // Model namespace
-        $this->model = 'App\\' . app()->appmodels[$this->name]['name'];
+        $this->model = 'App\\' . app()->appModels[$this->name]['name'];
 
         // Model exist
         if (!class_exists($this->model)) {
@@ -63,6 +60,8 @@ class ModelController extends Controller
         } else {
             die('Not exist table ' . $this->table);
         }
+
+        return true;
     }
 
     /**
@@ -86,7 +85,7 @@ class ModelController extends Controller
      */
     private function getColumns()
     {
-        return Schema::getColumnListing($this->table);
+        return \Schema::getColumnListing($this->table);
     }
 
     /**
@@ -95,49 +94,7 @@ class ModelController extends Controller
      */
     private function getColumnType($column)
     {
-        return Schema::getColumnType($this->table, $column);
-    }
-
-    /**
-     * Unset empty value in array
-     * @param array $array
-     * @param array $exclude
-     * @param array $inclusion
-     * @return array
-     */
-    private function unsetForeach(array $array, array $exclude = [], array $inclusion = [])
-    {
-        foreach ($array as $k => $r) {
-            if ($r == '') {
-                unset($array[$k]);
-            }
-            if (count($exclude) > 0 and in_array($k, $exclude)) {
-                unset($array[$k]);
-            }
-            if (count($inclusion) > 0 and !in_array($k, $inclusion)) {
-                unset($array[$k]);
-            }
-        }
-        return $array;
-    }
-
-    /**
-     * Null value in array
-     * @param array $array
-     * @param array $inclusion
-     * @return array
-     */
-    private function nullForeach(array $array, array $inclusion = [])
-    {
-        foreach ($array as $k => $r) {
-            if ($r == '') {
-                $array[$k] = NULL;
-            }
-            if (count($inclusion) > 0 and !in_array($k, $inclusion)) {
-                unset($array[$k]);
-            }
-        }
-        return $array;
+        return \Schema::getColumnType($this->table, $column);
     }
 
     /**
@@ -199,7 +156,6 @@ class ModelController extends Controller
 
     /**
      * Query search
-     * @param $query
      * @param $search
      * @return mixed
      */
@@ -217,7 +173,7 @@ class ModelController extends Controller
     /**
      * Rows list
      * @param Request $request
-     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request)
     {
@@ -239,7 +195,6 @@ class ModelController extends Controller
         $rows = $query->paginate(15);
 
         return view('fastleo::model', [
-            'exclude_type' => $this->exclude_list_type,
             'exclude_name' => $this->exclude_list_name,
             'model_columns' => $this->columns,
             'model_title' => ucfirst($this->name),
@@ -254,7 +209,7 @@ class ModelController extends Controller
      * Row add
      * @param Request $request
      * @param $model
-     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function add(Request $request, $model)
     {
@@ -314,7 +269,6 @@ class ModelController extends Controller
 
         // view
         return view('fastleo::model-edit', [
-            'exclude_type' => $this->exclude_row_type,
             'exclude_name' => $this->exclude_row_name,
             'model_columns' => $this->columns,
             'model_title' => ucfirst($this->name),
@@ -329,7 +283,7 @@ class ModelController extends Controller
      * @param Request $request
      * @param $model
      * @param $row_id
-     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(Request $request, $model, $row_id)
     {
@@ -383,7 +337,6 @@ class ModelController extends Controller
         // view
         $row = $this->app::where('id', $row_id)->first();
         return view('fastleo::model-edit', [
-            'exclude_type' => $this->exclude_row_type,
             'exclude_name' => $this->exclude_row_name,
             'model_columns' => $this->columns,
             'model_title' => ucfirst($this->name),
