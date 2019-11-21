@@ -2,27 +2,85 @@
 
 namespace Fastleo\Fastleo;
 
+use Illuminate\Support\Str;
+
 class Helper
 {
-    public static function getName($string)
+    /**
+     * Получение последнего значения
+     * @param string $string
+     * @return string
+     */
+    public static function getName(string $string): string
     {
         $array = explode('/', $string);
         $result = end($array);
         return $result;
     }
 
-    public static function str2class($string)
+    /**
+     * Преобразования строки в название метода
+     * @param string $string
+     * @return string
+     */
+    public static function str2method(string $string): string
     {
-        $array = explode('_', $string);
-        foreach ($array as $k => $v) {
-            if ($k > 0) {
-                $array[$k] = ucfirst($v);
-            }
-        }
-        return implode($array);
+        return Str::camel($string);
     }
 
-    public static function getModels()
+    /**
+     * Преобразования строки в название класса
+     * @param string $string
+     * @return string
+     */
+    public static function str2class(string $string, bool $cut = false): string
+    {
+        if ($cut) {
+            $string = substr($string, 0, -1);
+        }
+        return Str::studly($string);
+    }
+
+    /**
+     * Преобразования названия метода в строку
+     * @param string $string
+     * @return string
+     */
+    public static function method2str(string $string): string
+    {
+        $string = class_basename($string);
+        return Str::snake($string);
+    }
+
+    /**
+     * Парсинг строки и получение данных из модели
+     * @param string $string
+     * @return array
+     */
+    public static function str2data(string $string): array
+    {
+        // data parsing
+        $array = explode(":", $string);
+        $result = [];
+
+        // Model:column_key:column_value:where:value:?order?
+        if (count($array) == 5 or count($array) == 6) {
+            $result = app($array[0])->where($array[3], $array[4])->orderBy($array[5] ?? 'id')->pluck($array[2], $array[1])->toArray();
+        }
+
+        // Model:column_key:column_value:?order?
+        if (count($array) == 3 or count($array) == 4) {
+            $result = app($array[0])->orderBy($array[3] ?? 'id')->pluck($array[2], $array[1])->toArray();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Поиск моделей для работы в админке
+     * @return array
+     */
+    public static function getModels(): array
     {
         $appModels = [];
 
@@ -35,21 +93,41 @@ class Helper
                 if ($pathInfo['filename'] != 'User' and class_exists('App\\' . $pathInfo['filename'])) {
 
                     $name = 'App\\' . $pathInfo['filename'];
-                    $app = new $name();
 
-                    if (isset($app->fastleo) and $app->fastleo == false) {
+                    if (property_exists($name, 'fastleo') == false) {
                         continue;
                     }
 
-                    $appModels[strtolower($pathInfo['filename'])] = [
-                        'icon' => $app->fastleo_model['icon'] ?? null,
-                        'name' => $app->fastleo_model['name'] ?? $pathInfo['filename'],
-                        'title' => $app->fastleo_model['title'] ?? $pathInfo['filename'],
-                    ];
+                    $appModels[$pathInfo['filename']] = new $name;
                 }
             }
         }
 
         return $appModels;
+    }
+
+    /**
+     * Прсмотр полей для редактирования в модели по ее названию
+     * @param string $string
+     * @return object
+     */
+    public static function str2model(string $string): object
+    {
+        $class = self::str2class('App\\' . $string, true);
+        if (class_exists($class)) {
+            $class = app($class);
+            $columns = collect(\Schema::getColumnListing($class->getTable()))->flip();
+            $columns = $columns->except(collect(config('fastleo.exclude.row_name')));
+            foreach ($columns as $k => $v) {
+                if (Str::endsWith($k, '_id')) {
+                    $columns->forget($k);
+                } else {
+                    $columns[$k] = $class->fastleo_columns[$k];
+                }
+            }
+            return $columns;
+        } else {
+            return collect();
+        }
     }
 }

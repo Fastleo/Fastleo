@@ -26,7 +26,13 @@ class ServiceProvider extends BaseServiceProvider
             'fastleo_composer' => json_decode(file_get_contents(__DIR__ . '/../composer.json'))
         ]);
 
-        $this->app->appModels = Helper::getModels();
+        // Проверка существования конфига
+        if (is_null(config('fastleo.exclude'))) {
+            dd('run console command: php artisan vendor:publish --tag=fastleo --force');
+        }
+
+        // Список моделей
+        $this->app->models = Helper::getModels();
 
         // Route
         $this->loadRoutesFrom(__DIR__ . '/routes/web.php');

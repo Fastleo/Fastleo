@@ -9,70 +9,82 @@ use Illuminate\Database\Schema\Blueprint;
 
 class ModelController extends Controller
 {
-    public $app, $columns, $model, $name, $schema, $table;
+    /**
+     * Текущее приложение
+     * @var \Illuminate\Contracts\Foundation\Application|mixed|string
+     */
+    public $app;
 
-    public $fastleo_model, $fastleo_columns;
+    /**
+     * Пространство имен класса
+     * @var string
+     */
+    public $namespace;
 
-    public $exclude_get_list = ['id', '_token', 'page', 'search'];
+    /**
+     * Основное название класса
+     * @var string|null
+     */
+    public $name;
 
-    public $exclude_list_name = ['sort', 'menu', 'password', 'remember_token', 'admin'];
+    /**
+     * Название
+     * @var string|null
+     */
+    public $title;
 
-    public $exclude_row_name = ['id', 'sort', 'menu', 'password', 'remember_token', 'created_at', 'updated_at'];
+    /**
+     * Название таблицы
+     * @var mixed
+     */
+    public $table;
+
+    /**
+     * Схема таблицы
+     * @var mixed
+     */
+    public $schema;
+
+    /**
+     * Список столбцов
+     * @var
+     */
+    public $columns;
 
     /**
      * ModelController constructor.
      */
     public function __construct()
     {
-        // Model name
+        // Имя модели для работы
         $this->name = request()->segment(3);
 
-        // Model namespace
-        $this->model = 'App\\' . app()->appModels[$this->name]['name'];
+        // namespace модели
+        $this->namespace = 'App\\' . $this->name;
 
-        // Model exist
-        if (!class_exists($this->model)) {
-            return false;
-        }
+        // Выбираем модель для работы
+        $this->app = app($this->namespace);
 
-        // Start App
-        $this->app = $this->getModel();
-
-        // Table name
+        // Имя таблицы
         $this->table = $this->getTable();
 
-        // Table column list
+        // Список столбцов
         $this->schema = $this->getColumns();
 
-        // Exclude visible columns
-        $this->exclude_list_name = array_merge($this->exclude_list_name, $this->app->getHidden());
-        $this->exclude_row_name = array_merge($this->exclude_row_name, $this->app->getHidden());
-
         // Fastleo variables
-        $this->fastleo_model = $this->app->fastleo_model ?: [];
-        $this->fastleo_columns = $this->app->fastleo_columns ?: [];
+        $this->title = $this->app->fastleo ?? $this->name;
 
         // Table columns
-        if (count($this->schema) > 0) {
-            foreach ($this->schema as $column) {
-                $this->columns[$column] = $this->getColumnType($column);
+        foreach ($this->schema as $column) {
+            $this->columns[$column] = $this->app->fastleo_columns[$column] ?? ['type' => $this->getColumnType($column)];
+            if (!isset($this->columns[$column]['type'])) {
+                $this->columns[$column]['type'] = 'string';
             }
-        } else {
-            die('Not exist table ' . $this->table);
         }
-
-        return true;
     }
 
     /**
-     * @return mixed
-     */
-    private function getModel()
-    {
-        return app($this->model);
-    }
-
-    /**
+     * Название основной таблицы
      * @return mixed
      */
     private function getTable()
@@ -81,93 +93,22 @@ class ModelController extends Controller
     }
 
     /**
+     * Список столбцов таблицы
      * @return mixed
      */
     private function getColumns()
     {
-        return \Schema::getColumnListing($this->table);
+        return Schema::getColumnListing($this->table);
     }
 
     /**
+     * Типы столбцов таблицы
      * @param $column
      * @return mixed
      */
     private function getColumnType($column)
     {
-        return \Schema::getColumnType($this->table, $column);
-    }
-
-    /**
-     * @return array
-     */
-    private function parsColumns()
-    {
-        foreach ($this->fastleo_columns as $k => $v) {
-            // value = key
-            $this->fastleo_columns[$k]['key'] = true;
-
-            if (isset($v['data']) and is_string($v['data'])) {
-                // data parsing
-                $prs = explode(":", $v['data']);
-                // create array
-                if (count($prs) == 5) {
-                    // Model:column_key:column_value:where:value
-                    $this->fastleo_columns[$k]['data'] = app($prs[0])->where($prs[3], $prs[4])->orderBy('id')->pluck($prs[2], $prs[1])->toArray();
-                } elseif (count($prs) == 4) {
-                    // Model:column_value:where:value
-                    $this->fastleo_columns[$k]['data'] = app($prs[0])->where($prs[2], $prs[3])->orderBy('id')->pluck($prs[1])->toArray();
-                    // text to array
-                    if (isset($this->fastleo_columns[$k]['delimiter'])) {
-                        foreach ($this->fastleo_columns[$k]['data'] as $value) {
-                            $columns[$k]['data'] = explode($this->fastleo_columns[$k]['delimiter'], $value);
-                        }
-                        if (isset($columns[$k]['data'])) {
-                            $this->fastleo_columns[$k]['data'] = $columns[$k]['data'];
-                        }
-                    }
-                    // value = value
-                    $this->fastleo_columns[$k]['key'] = null;
-                } elseif (count($prs) == 3) {
-                    // Model:column_key:column_value
-                    $this->fastleo_columns[$k]['data'] = app($prs[0])->whereNotNull('id')->orderBy('id')->pluck($prs[2], $prs[1])->toArray();
-                } else {
-                    // error
-                    $this->fastleo_columns[$k]['data'] = [];
-                }
-            }
-
-        }
-
-        return $this->fastleo_columns;
-    }
-
-    /**
-     * @param $model_name
-     * @return string
-     */
-    private function getModelName($model_name)
-    {
-        $array_name = explode('_', $model_name);
-        foreach ($array_name as $k => $name) {
-            $array_name[$k] = ucfirst($name);
-        }
-        return implode('', $array_name);
-    }
-
-    /**
-     * Query search
-     * @param $search
-     * @return mixed
-     */
-    private function search($search)
-    {
-        $query = $this->app::whereNull('id');
-        foreach ($this->columns as $column => $type) {
-            if (in_array($type, ['string', 'text'])) {
-                $query->orWhere($column, 'LIKE', '%' . $search . '%');
-            }
-        }
-        return $query;
+        return Schema::getColumnType($this->table, $column);
     }
 
     /**
@@ -177,31 +118,29 @@ class ModelController extends Controller
      */
     public function index(Request $request)
     {
-        // Search all rows
-        if ($request->get('search')) {
-            $query = $this->search($request->get('search'));
-        } else {
-            $query = $this->app::whereNotNull('id');
+        // Список записей в таблице
+        $rows = $this->app::whereNotNull('id');
+
+        // Поиск по записям
+        if ($request->has('_search')) {
+            $rows->where(function ($query) use ($request) {
+                foreach ($this->columns as $column => $data) {
+                    if (in_array($data['type'], ['string', 'text'])) {
+                        $query->orWhere($column, 'LIKE', '%' . $request->get('_search') . '%');
+                    }
+                }
+                return $query;
+            });
         }
 
-        // sorting
-        if (isset($this->columns['sort'])) {
-            $query->orderBy('sort')->orderBy('id');
-        } else {
-            $query->orderBy('id');
-        }
-
-        // all rows
-        $rows = $query->paginate(15);
+        // Сортировка
+        $rows->orderBy(isset($this->columns['sort']) ? 'sort' : 'id');
 
         return view('fastleo::model', [
-            'exclude_name' => $this->exclude_list_name,
-            'model_columns' => $this->columns,
-            'model_title' => ucfirst($this->name),
-            'model_name' => $this->name,
-            'model' => $this->fastleo_model,
-            'rows' => $rows,
-            'f' => $this->fastleo_columns,
+            'rows' => $rows->paginate(15),
+            'name' => $this->name,
+            'title' => $this->title,
+            'columns' => $this->columns,
         ]);
     }
 
@@ -213,8 +152,7 @@ class ModelController extends Controller
      */
     public function add(Request $request, $model)
     {
-        // add
-        if ($request->except($this->exclude_get_list)) {
+        if ($request->isMethod('post')) {
 
             // дата создания
             if (isset($this->columns['created_at'])) {
@@ -227,54 +165,55 @@ class ModelController extends Controller
             }
 
             // возможно есть массивы
-            foreach ($request->except($this->exclude_get_list) as $key => $value) {
+            foreach ($request->except(config('fastleo.exclude.get_list')) as $k => $value) {
                 if (is_array($value)) {
-                    if (!isset($this->fastleo_columns[$key]['type']) or $this->fastleo_columns[$key]['type'] != 'include') {
-                        $request->request->add([$key => implode(",", $value)]);
+                    if (isset($this->columns[$k]['type']) and $this->columns[$k]['type'] == 'include') {
+                        $relations[$k] = $value;
+                        $request->request->add([$k => null]);
                     } else {
-                        $many[$key] = $value;
-                        $request->request->add([$key => null]);
+                        $request->request->add([$k => implode(",", $value)]);
                     }
                 }
             }
 
-            // add row
-            $insert_id = $this->app->insertGetId($request->except($this->exclude_get_list));
+            // Добавляем запись в БД
+            $insert_id = $this->app->insertGetId(
+                $request->except(config('fastleo.exclude.get_list'))
+            );
 
-            // include
-            if (isset($many)) {
-                foreach ($many as $key => $value) {
-                    if (count($value) > 0) {
-                        $manyName = substr($key, 0, -1);
-                        $manyApp = app('App\\' . self::getModelName($manyName));
-                        foreach ($value as $v) {
-                            if (!is_null($v)) {
-                                $manyApp::insert([
-                                    $model . '_id' => $insert_id,
-                                    $manyName => $v,
-                                ]);
-                            }
+            // Добавляем записи в зависимые таблицы
+            if (isset($relations)) {
+                foreach ($relations as $name => $value) {
+                    $manyName = substr($name, 0, -1);
+                    $manyApp = app('App\\' . Helper::str2class($manyName));
+                    foreach ($value as $val) {
+                        $many = new $manyApp;
+                        $many->{Helper::method2str($this->namespace) . '_id'} = $insert_id;
+                        foreach ($val as $c => $v) {
+                            $many->{$c} = $v;
                         }
+                        $many->save();
                     }
                 }
             }
 
-            if (!is_null($request->get('id'))) {
+            if ($request->has('_return')) {
                 header('Location: /fastleo/app/' . $model . '?' . $request->getQueryString());
+                die;
             } else {
                 header('Location: /fastleo/app/' . $model . '/edit/' . $insert_id . '?' . $request->getQueryString());
+                die;
             }
-            die;
         }
+
+        // Исключаем нередактируемые поля
+        $this->columns = \Arr::except($this->columns, config('fastleo.exclude.row_name'));
 
         // view
         return view('fastleo::model-edit', [
-            'exclude_name' => $this->exclude_row_name,
-            'model_columns' => $this->columns,
-            'model_title' => ucfirst($this->name),
-            'model_name' => $this->name,
-            'model' => $this->fastleo_model,
-            'f' => $this->parsColumns(),
+            'name' => $this->name,
+            'title' => $this->title,
+            'columns' => $this->columns,
         ]);
     }
 
@@ -287,64 +226,67 @@ class ModelController extends Controller
      */
     public function edit(Request $request, $model, $row_id)
     {
-        // edit
-        if ($request->except($this->exclude_get_list)) {
+        if ($request->isMethod('post')) {
+
+            // дата создания
             if (isset($this->columns['updated_at'])) {
                 $request->request->add(['updated_at' => \Carbon\Carbon::now()]);
             }
 
             // возможно есть массивы
-            foreach ($request->except($this->exclude_get_list) as $key => $value) {
+            foreach ($request->except(config('fastleo.exclude.get_list')) as $k => $value) {
                 if (is_array($value)) {
-                    if (!isset($this->fastleo_columns[$key]['type']) or $this->fastleo_columns[$key]['type'] != 'include') {
-                        $request->request->add([$key => implode(",", $value)]);
+                    if (isset($this->columns[$k]['type']) and $this->columns[$k]['type'] == 'include') {
+                        $relations[$k] = $value;
+                        $request->request->add([$k => null]);
                     } else {
-                        $many[$key] = $value;
-                        $request->request->add([$key => null]);
+                        $request->request->add([$k => implode(",", $value)]);
                     }
                 }
             }
 
-            // include
-            if (isset($many)) {
-                foreach ($many as $key => $value) {
-                    if (count($value) > 0) {
-                        $manyName = substr($key, 0, -1);
-                        $manyApp = app('App\\' . self::getModelName($manyName));
-                        $manyApp::where($model . '_id', $row_id)->delete();
-                        foreach ($value as $v) {
-                            if (!is_null($v)) {
-                                $manyApp::insert([
-                                    $model . '_id' => $row_id,
-                                    $manyName => $v,
-                                ]);
-                            }
+            // Обновление записи в БД
+            $this->app->where('id', $row_id)->update(
+                $request->except(config('fastleo.exclude.get_list'))
+            );
+
+            // Добавляем записи в зависимые таблицы
+            if (isset($relations)) {
+                foreach ($relations as $name => $value) {
+                    $manyName = substr($name, 0, -1);
+                    $manyApp = app('App\\' . Helper::str2class($manyName));
+                    $manyApp::where(Helper::method2str($this->namespace) . '_id', $row_id)->delete();
+                    foreach ($value as $val) {
+                        $many = new $manyApp;
+                        $many->{Helper::method2str($this->namespace) . '_id'} = $row_id;
+                        foreach ($val as $c => $v) {
+                            $many->{$c} = $v;
                         }
+                        $many->save();
                     }
                 }
             }
 
-            $this->app->where('id', $row_id)->update($request->except($this->exclude_get_list));
-
-            if (!is_null($request->get('id'))) {
+            if ($request->has('_return')) {
                 header('Location: /fastleo/app/' . $model . '?' . $request->getQueryString());
+                die;
             } else {
                 header('Location: /fastleo/app/' . $model . '/edit/' . $row_id . '?' . $request->getQueryString());
+                die;
             }
-            die;
         }
 
-        // view
+        // Запись в ДБ
         $row = $this->app::where('id', $row_id)->first();
+
+        // Исключаем нередактируемые поля
+        $this->columns = \Arr::except($this->columns, config('fastleo.exclude.row_name'));
+
         return view('fastleo::model-edit', [
-            'exclude_name' => $this->exclude_row_name,
-            'model_columns' => $this->columns,
-            'model_title' => ucfirst($this->name),
-            'model_name' => $this->name,
-            'model' => $this->fastleo_model,
-            'row_id' => $row_id,
             'row' => $row,
-            'f' => $this->parsColumns(),
+            'name' => $this->name,
+            'title' => $this->title,
+            'columns' => $this->columns,
         ]);
     }
 
@@ -447,22 +389,6 @@ class ModelController extends Controller
     }
 
     /**
-     * Добавление сортировки
-     * @param Request $request
-     * @param $model
-     */
-    public function sortingAdd(Request $request, $model)
-    {
-        if (!isset($this->columns['sort'])) {
-            Schema::table($this->table, function (Blueprint $table) {
-                $table->integer('sort')->after('id')->nullable();
-            });
-        }
-        $this->columns['sort'] = 'integer';
-        $this->sortingFix($request, $model);
-    }
-
-    /**
      * Исправление сортировки
      * @param Request $request
      * @param $model
@@ -478,22 +404,6 @@ class ModelController extends Controller
                 ]);
                 $sort++;
             }
-        }
-        header('Location: ' . route('fastleo.model', [$model]) . '?' . $request->getQueryString());
-        die;
-    }
-
-    /**
-     * ДОбавление меню, если его нет
-     * @param Request $request
-     * @param $model
-     */
-    public function menuAdd(Request $request, $model)
-    {
-        if (!isset($this->columns['menu'])) {
-            Schema::table($this->table, function (Blueprint $table) {
-                $table->integer('menu')->after('id')->nullable()->default('1');
-            });
         }
         header('Location: ' . route('fastleo.model', [$model]) . '?' . $request->getQueryString());
         die;

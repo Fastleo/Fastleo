@@ -32,17 +32,14 @@
                     <li class="nav-item">
                         <a href="{{ route('fastleo.users') }}" class="nav-link"><i class="fas fa-users"></i> Пользователи</a>
                     </li>
-                    @foreach(app()->appModels as $model)
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->is('fastleo/app/'. strtolower($model['name'])) ? 'active' : '' }}" href="/fastleo/app/{{ strtolower($model['name']) }}">
-                                @if(isset($model['icon']) and $model['icon'] != '')
-                                    <i class="{{ $model['icon'] }}"></i>
-                                @else
-                                    <i class="fas fa-box-open"></i>
-                                @endif
-                                {{ $model['title'] }}
-                            </a>
-                        </li>
+                    @foreach(app()->models as $model => $class)
+                        @if($class->fastleo)
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->is('fastleo/app/'. $model) ? 'active' : '' }}" href="/fastleo/app/{{ $model }}">
+                                    <i class="fas fa-box-open"></i> {{ $class->fastleo ?? $model }}
+                                </a>
+                            </li>
+                        @endif
                     @endforeach
                 @endif
                 <li class="nav-item">
@@ -133,22 +130,33 @@
         });
 
         $('.addInput').on('click', function () {
-            var div = $(this).closest('div.row');
+            var div = $(this).closest('div.include');
             var name = div.find('input').attr('data-name');
             var elements = $('input[data-name=' + name + ']').length;
+
             var divCopy = div.clone(true);
             divCopy.find('input').val('');
-            divCopy.find('input').attr('id', divCopy.find('input').attr('id').replace(/\d+/g, parseInt(elements + 1)));
-            divCopy.find('input').attr('name', divCopy.find('input').attr('name').replace(/\d+/g, parseInt(elements + 1)));
-            if (divCopy.find('.filemanager').length > 0) {
-                divCopy.find('.filemanager').attr('data-src', divCopy.find('.filemanager').attr('data-src').replace(/field=(\w+)/g, 'field=' + name + parseInt(elements + 1)));
-            }
             div.after(divCopy);
+
+            $('.include').each(function (index, value) {
+                $(this).find('input[type=text]').each(function (i, v) {
+                    var input = $(this).attr('name');
+                    $(this).attr('name', input.replace(/\d+/g, index));
+                });
+            });
+
+            $('.include').find('input[type=text]').each(function (index, value) {
+                var id = $(this).attr('id');
+                $(this).attr('id', id.replace(/\d+/g, index));
+                var filemanager = $(this).closest('.include').find('.filemanager').attr('data-src');
+                $(this).closest('.include').find('.filemanager').attr('data-src', filemanager.replace(/\d+/g, index));
+            });
+
             return false;
         });
 
         $('.delInput').on('click', function () {
-            var div = $(this).closest('div.row');
+            var div = $(this).closest('div.include');
             var name = div.find('input').attr('data-name');
             var elements = $('input[data-name=' + name + ']').length;
             if (elements > 1) {

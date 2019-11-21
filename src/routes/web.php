@@ -26,9 +26,7 @@ Route::group(['prefix' => 'fastleo', 'middleware' => ['web']], function () {
     Route::any('app/{model}/add', 'Fastleo\Fastleo\ModelController@add')->name('fastleo.model.add');
     Route::get('app/{model}/menu_on', 'Fastleo\Fastleo\ModelController@menuOn')->name('fastleo.model.menu_on');
     Route::get('app/{model}/menu_off', 'Fastleo\Fastleo\ModelController@menuOff')->name('fastleo.model.menu_off');
-    Route::get('app/{model}/menu_add', 'Fastleo\Fastleo\ModelController@menuAdd')->name('fastleo.model.menu_add');
     Route::get('app/{model}/sorting_fix', 'Fastleo\Fastleo\ModelController@sortingFix')->name('fastleo.model.sorting_fix');
-    Route::get('app/{model}/sorting_add', 'Fastleo\Fastleo\ModelController@sortingAdd')->name('fastleo.model.sorting_add');
     Route::get('app/{model}/rows_export', 'Fastleo\Fastleo\ModelController@rowsExport')->name('fastleo.model.rows_export');
     Route::any('app/{model}/rows_import', 'Fastleo\Fastleo\ModelController@rowsImport')->name('fastleo.model.rows_import');
     Route::get('app/{model}/up/{row_id}', 'Fastleo\Fastleo\ModelController@up')->where('row_id', '[0-9]+')->name('fastleo.model.up');

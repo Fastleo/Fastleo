@@ -2,7 +2,7 @@
     "name": "fastleo/fastleo",
     "type": "library",
     "license": "CC-BY-SA-4.0",
-    "version": "1.1.4",
+    "version": "2.0.0",
     "authors": [
         {
             "name": "Roman Zakharov",
@@ -14,13 +14,12 @@
         "ext-gd": "*",
         "ext-json": "*",
         "ext-fileinfo": "*",
-        "doctrine/dbal": "^2.9",
-        "intervention/image": "^2.4",
-        "phpoffice/phpspreadsheet": "^1.7",
+        "doctrine/dbal": "^2.10",
+        "intervention/image": "^2.5",
+        "laravel/framework": "^6.5",
         "maatwebsite/excel": "^3.1"
     },
     "require-dev": {
-        "laravel/framework": "^6.0",
         "phpunit/phpunit": "^8.0"
     },
     "autoload": {
@@ -39,5 +38,10 @@
                 "Fastleo\\Fastleo\\ServiceProvider"
             ]
         }
+    },
+    "scripts": {
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=fastleo --force"
+        ]
     }
 }
