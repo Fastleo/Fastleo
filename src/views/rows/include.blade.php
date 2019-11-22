@@ -9,6 +9,11 @@
 @endphp
 @if($include->count() > 0)
     @php $i = 0; @endphp
+    <div class="row">
+        <div class="col">
+            <h4>{{ $data['title'] ?? ucfirst($column) }}</h4>
+        </div>
+    </div>
     @foreach($include as $v)
         @php $iteration = $loop->index; @endphp
         <div class="include">
