@@ -148,8 +148,8 @@
             $('.include').find('input[type=text]').each(function (index, value) {
                 var id = $(this).attr('id');
                 $(this).attr('id', id.replace(/\d+/g, index));
-                var filemanager = $(this).closest('.include').find('.filemanager').attr('data-src');
-                $(this).closest('.include').find('.filemanager').attr('data-src', filemanager.replace(/\d+/g, index));
+                var filemanager = $(this).prev('.filemanager').attr('data-src');
+                $(this).prev('.filemanager').attr('data-src', filemanager.replace(/\d+/g, index));
             });
 
             return false;
