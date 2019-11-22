@@ -2,7 +2,7 @@
     "name": "fastleo/fastleo",
     "type": "library",
     "license": "CC-BY-SA-4.0",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "authors": [
         {
             "name": "Roman Zakharov",
@@ -40,7 +40,7 @@
         }
     },
     "scripts": {
-        "post-update-cmd": [
+        "post-install-cmd": [
             "@php artisan vendor:publish --tag=fastleo --force"
         ]
     }

@@ -22,7 +22,7 @@
                                     <i class="fas fa-folder-open"></i>
                                 </div>
                             </div>
-                            <input type="text" name="{{ $column }}[{{ $iteration }}][{{ $col }}]" id="{{ $col }}{{ $i }}" data-name="{{ $col }}" class="form-control" placeholder="{{ $relation['placeholder'] ?? '' }}" value="{{ $v->{substr($col, 0, -1)} ?? $v->{$col} ?? '' }}">
+                            <input type="{{ $relation['type'] ?? 'text' }}" name="{{ $column }}[{{ $iteration }}][{{ $col }}]" id="{{ $col }}{{ $i }}" data-name="{{ $col }}" class="form-control" placeholder="{{ $relation['placeholder'] ?? '' }}" value="{{ $v->{substr($col, 0, -1)} ?? $v->{$col} ?? '' }}">
                             <div class="input-group-append">
                                 <span class="input-group-text addInput">+</span>
                             </div>
@@ -34,7 +34,7 @@
                 </div>
                 @php $i++; @endphp
             @endforeach
+            <hr>
         </div>
     @endforeach
 @endif
-<hr>

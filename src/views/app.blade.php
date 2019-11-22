@@ -139,13 +139,13 @@
             div.after(divCopy);
 
             $('.include').each(function (index, value) {
-                $(this).find('input[type=text]').each(function (i, v) {
+                $(this).find('input').each(function (i, v) {
                     var input = $(this).attr('name');
                     $(this).attr('name', input.replace(/\d+/g, index));
                 });
             });
 
-            $('.include').find('input[type=text]').each(function (index, value) {
+            $('.include').find('input').each(function (index, value) {
                 var id = $(this).attr('id');
                 $(this).attr('id', id.replace(/\d+/g, index));
                 var filemanager = $(this).prev('.filemanager').attr('data-src');
