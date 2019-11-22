@@ -108,6 +108,8 @@
     });
     $(document).ready(function () {
 
+        $('.tt').tooltip();
+
         $('.filemanager').on('click', function () {
             var url = $(this).attr('data-src');
             var w = 1020;
@@ -139,7 +141,7 @@
             div.after(divCopy);
 
             $('.include').each(function (index, value) {
-                $(this).find('input').each(function (i, v) {
+                $(this).find('input, textarea').each(function (i, v) {
                     var input = $(this).attr('name');
                     $(this).attr('name', input.replace(/\d+/g, index));
                 });
@@ -160,7 +162,9 @@
             var name = div.find('input').attr('data-name');
             var elements = $('input[data-name=' + name + ']').length;
             if (elements > 1) {
-                div.remove();
+                div.hide(500, function () {
+                    div.remove();
+                });
             }
             return false;
         });

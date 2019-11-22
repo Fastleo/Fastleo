@@ -9,7 +9,7 @@
 @endphp
 @if($include->count() > 0)
     @php $i = 0; @endphp
-    <div class="row">
+    <div class="form-group row">
         <div class="col">
             <h4>{{ $data['title'] ?? ucfirst($column) }}</h4>
         </div>
@@ -27,13 +27,22 @@
                                     <i class="fas fa-folder-open"></i>
                                 </div>
                             </div>
-                            <input type="{{ $relation['type'] ?? 'text' }}" name="{{ $column }}[{{ $iteration }}][{{ $col }}]" id="{{ $col }}{{ $i }}" data-name="{{ $col }}" class="form-control" placeholder="{{ $relation['placeholder'] ?? '' }}" value="{{ $v->{substr($col, 0, -1)} ?? $v->{$col} ?? '' }}">
-                            <div class="input-group-append">
-                                <span class="input-group-text addInput">+</span>
-                            </div>
-                            <div class="input-group-append">
-                                <span class="input-group-text delInput">-</span>
-                            </div>
+                            @if(isset($relation['type']) and $relation['type'] == 'text')
+                                <textarea name="{{ $column }}[{{ $iteration }}][{{ $col }}]" id="{{ $col }}{{ $i }}" class="form-control" rows="3" placeholder="{{ $relation['placeholder'] ?? '' }}">{{ $v->{substr($col, 0, -1)} ?? $v->{$col} ?? '' }}</textarea>
+                            @else
+                                <input type="{{ $relation['type'] ?? 'text' }}" name="{{ $column }}[{{ $iteration }}][{{ $col }}]" id="{{ $col }}{{ $i }}" data-name="{{ $col }}" class="form-control" placeholder="{{ $relation['placeholder'] ?? '' }}" value="{{ $v->{substr($col, 0, -1)} ?? $v->{$col} ?? '' }}">
+                                @if(isset($relation['media']) and isset($v->{$col}) and $v->{$col} != '')
+                                    <div class="input-group-append tt" data-html="true" title="<img src='{{ $v->{$col} ?? '' }}' width='100'>">
+                                        <span class="input-group-text"><i class="fas fa-image"></i></span>
+                                    </div>
+                                @endif
+                                <div class="input-group-append">
+                                    <span class="input-group-text addInput">+</span>
+                                </div>
+                                <div class="input-group-append">
+                                    <span class="input-group-text delInput">-</span>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
