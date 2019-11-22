@@ -28,11 +28,11 @@
                                 </div>
                             </div>
                             @if(isset($relation['type']) and $relation['type'] == 'text')
-                                <textarea name="{{ $column }}[{{ $iteration }}][{{ $col }}]" id="{{ $col }}{{ $i }}" class="form-control" rows="3" placeholder="{{ $relation['placeholder'] ?? '' }}">{{ $v->{substr($col, 0, -1)} ?? $v->{$col} ?? '' }}</textarea>
+                                <textarea name="{{ $column }}[{{ $iteration }}][{{ $col }}]" id="{{ $col }}{{ $i }}" class="form-control" rows="3" placeholder="{{ $relation['placeholder'] ?? '' }}">{{ $v->{$col} ?? '' }}</textarea>
                             @else
-                                <input type="{{ $relation['type'] ?? 'text' }}" name="{{ $column }}[{{ $iteration }}][{{ $col }}]" id="{{ $col }}{{ $i }}" data-name="{{ $col }}" class="form-control" placeholder="{{ $relation['placeholder'] ?? '' }}" value="{{ $v->{substr($col, 0, -1)} ?? $v->{$col} ?? '' }}">
+                                <input type="{{ $relation['type'] ?? 'text' }}" name="{{ $column }}[{{ $iteration }}][{{ $col }}]" id="{{ $col }}{{ $i }}" data-name="{{ $col }}" class="form-control" placeholder="{{ $relation['placeholder'] ?? '' }}" value="{{ $v->{$col} ?? '' }}">
                                 @if(isset($relation['media']) and isset($v->{$col}) and $v->{$col} != '')
-                                    <div class="input-group-append tt" data-html="true" title="<img src='{{ $v->{$col} ?? '' }}' width='100'>">
+                                    <div class="input-group-append tt" data-html="true" title="<img src='{{ $v->{$col} ?? '' }}' width='182'>">
                                         <span class="input-group-text"><i class="fas fa-image"></i></span>
                                     </div>
                                 @endif

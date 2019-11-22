@@ -30,3 +30,15 @@
 .fastleo-content a:not([class]) {
     color: #06090a;
 }
+
+.tooltip-main {
+    background: #f3f3f3;
+    border: 1px solid #737373;
+    color: #737373;
+}
+
+.tooltip-inner {
+    background: #FFFFFF;
+    color: rgb(0, 0, 0, .7);
+    border: 1px solid #737373;
+}
