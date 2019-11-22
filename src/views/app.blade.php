@@ -132,12 +132,11 @@
         });
 
         $('.addInput').on('click', function () {
-            var div = $(this).closest('div.include');
-            var name = div.find('input').attr('data-name');
-            var elements = $('input[data-name=' + name + ']').length;
 
+            var div = $(this).closest('.include');
             var divCopy = div.clone(true);
-            divCopy.find('input').val('');
+
+            divCopy.find('input, textarea').val('');
             div.after(divCopy);
 
             $('.include').each(function (index, value) {
@@ -158,10 +157,10 @@
         });
 
         $('.delInput').on('click', function () {
-            var div = $(this).closest('div.include');
+            var div = $(this).closest('.include');
             var name = div.find('input').attr('data-name');
-            var elements = $('input[data-name=' + name + ']').length;
-            if (elements > 1) {
+            var include = $('.include').length;
+            if (include > 1) {
                 div.hide(500, function () {
                     div.remove();
                 });

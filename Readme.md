@@ -26,29 +26,39 @@
 
 ****Fastleo setting model****
     
-    public $fastleo = false|title;
-    public $fastleo_columns = [];
-
-****Extend Fastleo setting model****
-    
-    public $fastleo = 'ModelName';
+    public $fastleo = ModelName|title;
 
     public $fastleo_columns = [
+    
         'column' => [
+        
             'title' => 'Title',
-            'type' => 'string[text|integer|checkbox|select|include]',
-            'media' => false,
-            'tinymce' => false,
+            'type' => 'string[number|checkbox|text|select|include]',
             'visible' => true,
             'description' => '',
             'placeholder' => '',
             
+            // if type == string
+            'media' => false,
+            
+            // if type == text
+            'tinymce' => false,
+            
             // if type == select
             'multiple' => false,
-            'data' => [], // array, example [10,20,30]
-            'data' => '', // string, example 'App\User:id:email:name'
-                          // 'Model:key:value:?order?'
-                          // 'Model:key:value:where:?order?'
+            
+            // if type == select
+            // example [10,20,30]
+            // example 'App\User:id:email:name'
+            // example 'Model:key:value:?order?'
+            // example 'Model:key:value:where:?order?'
+            'data' => [],
+            'data' => 'Model:key:value',
+            
+            // if type == include
+            // example 'App\UserImage'
+            'data' => 'Relationships class'
+            
         ],
     ];
     

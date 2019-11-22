@@ -8,6 +8,11 @@
                 </div>
             @endif
             <input type="text" id="{{ $column }}" name="{{ $column }}" class="form-control" placeholder="{{ $data['placeholder'] ?? '' }}" value="{{ $row ? $row->{$column} : '' }}">
+            @if(isset($data['media']) and isset($row->{$column}) and $row->{$column} != '')
+                <div class="input-group-append tt" data-html="true" title="<img src='{{ $row->{$column} ?? '' }}' width='182'>">
+                    <span class="input-group-text"><i class="fas fa-image"></i></span>
+                </div>
+            @endif
         </div>
     </div>
 </div>

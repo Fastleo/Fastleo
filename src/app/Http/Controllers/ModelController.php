@@ -167,8 +167,8 @@ class ModelController extends Controller
             // возможно есть массивы
             foreach ($request->except(config('fastleo.exclude.get_list')) as $k => $value) {
                 if (is_array($value)) {
-                    if (isset($this->columns[$k]['type']) and $this->columns[$k]['type'] == 'include') {
-                        $relations[$k] = $value;
+                    if (isset($this->columns[$k]['type']) and $this->columns[$k]['type'] == 'include' and isset($this->columns[$k]['data'])) {
+                        $relations[$this->columns[$k]['data']] = $value;
                         $request->request->add([$k => null]);
                     } else {
                         $request->request->add([$k => implode(",", $value)]);
@@ -184,8 +184,7 @@ class ModelController extends Controller
             // Добавляем записи в зависимые таблицы
             if (isset($relations)) {
                 foreach ($relations as $name => $value) {
-                    $manyName = substr($name, 0, -1);
-                    $manyApp = app('App\\' . Helper::str2class($manyName));
+                    $manyApp = app($name);
                     foreach ($value as $val) {
                         $many = new $manyApp;
                         $many->{Helper::method2str($this->namespace) . '_id'} = $insert_id;
@@ -236,8 +235,8 @@ class ModelController extends Controller
             // возможно есть массивы
             foreach ($request->except(config('fastleo.exclude.get_list')) as $k => $value) {
                 if (is_array($value)) {
-                    if (isset($this->columns[$k]['type']) and $this->columns[$k]['type'] == 'include') {
-                        $relations[$k] = $value;
+                    if (isset($this->columns[$k]['type']) and $this->columns[$k]['type'] == 'include' and isset($this->columns[$k]['data'])) {
+                        $relations[$this->columns[$k]['data']] = $value;
                         $request->request->add([$k => null]);
                     } else {
                         $request->request->add([$k => implode(",", $value)]);
@@ -253,8 +252,7 @@ class ModelController extends Controller
             // Добавляем записи в зависимые таблицы
             if (isset($relations)) {
                 foreach ($relations as $name => $value) {
-                    $manyName = substr($name, 0, -1);
-                    $manyApp = app('App\\' . Helper::str2class($manyName));
+                    $manyApp = app($name);
                     $manyApp::where(Helper::method2str($this->namespace) . '_id', $row_id)->delete();
                     foreach ($value as $val) {
                         $many = new $manyApp;

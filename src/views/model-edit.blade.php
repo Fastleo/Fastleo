@@ -18,7 +18,7 @@
                 @foreach($columns as $column => $data)
                     @if(in_array($data['type'], ['text','tinytext','mediumtext','longtext','json']))
                         @include('fastleo::rows.text', [$columns, $column, $data, 'row' => $row ?? null])
-                    @elseif(in_array($data['type'], ['integer', 'int', 'tinyint', 'bigint', 'float', 'double', 'decimal']))
+                    @elseif(in_array($data['type'], ['number', 'integer', 'int', 'tinyint', 'bigint', 'float', 'double', 'decimal']))
                         @include('fastleo::rows.integer', [$columns, $column, $data, 'row' => $row ?? null])
                     @elseif(in_array($data['type'], ['checkbox', 'boolean']))
                         @include('fastleo::rows.checkbox', [$columns, $column, $data, 'row' => $row ?? null])
