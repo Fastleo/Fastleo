@@ -142,4 +142,22 @@ class FilemanagerController extends Controller
         }
         return view('fastleo::filemanager/create');
     }
+
+    /**
+     * Удаление файлов и папок
+     * @param Request $request
+     */
+    public function trash(Request $request)
+    {
+        $files = $request->all()['files'];
+        foreach ($files as $file) {
+            if (Storage::exists($file)) {
+                if (Storage::mimeType($file) == 'directory') {
+                    Storage::deleteDirectory($file);
+                } else {
+                    Storage::delete($file);
+                }
+            }
+        }
+    }
 }

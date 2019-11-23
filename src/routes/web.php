@@ -18,6 +18,7 @@ Route::group(['prefix' => 'fastleo', 'middleware' => ['web']], function () {
 
     // FileManager
     Route::get('filemanager', 'Fastleo\Fastleo\FilemanagerController@index')->name('fastleo.filemanager');
+    Route::any('filemanager/trash', 'Fastleo\Fastleo\FilemanagerController@trash')->name('fastleo.filemanager.trash');
     Route::any('filemanager/create', 'Fastleo\Fastleo\FilemanagerController@create')->name('fastleo.filemanager.create');
     Route::any('filemanager/uploads', 'Fastleo\Fastleo\FilemanagerController@uploads')->name('fastleo.filemanager.uploads');
 

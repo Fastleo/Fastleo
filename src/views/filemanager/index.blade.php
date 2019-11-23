@@ -17,6 +17,7 @@
                 <div class="block" style="background-image: url({{ asset('storage/fastleo/ico/folder.png') }});">
                     <span class="filename">{{ \Fastleo\Fastleo\Helper::getName($folder) }}</span>
                 </div>
+                <input type="checkbox" class="checkbox" value="{{ $folder }}">
             </a>
         @endforeach
 
@@ -25,6 +26,7 @@
                 <div class="block image" style="background-image: url({{ asset($file['preview']) }});" title="{{ $file['filename'] }}" data-url="/storage{{ substr($file['filename'], 6) }}">
                     <span class="filename">{{ Illuminate\Support\Str::limit(\Fastleo\Fastleo\Helper::getName($file['filename']), 14) }}</span>
                 </div>
+                <input type="checkbox" class="checkbox" value="{{ $file['filename'] }}">
             </a>
         @endforeach
 
@@ -50,5 +52,25 @@
             });
         </script>
     @endif
+
+    <script>
+        var files = [];
+        $('.checkbox').on('change', function () {
+            files = [];
+            $('.checkbox:checked').each(function (i) {
+                files.push($(this).val());
+            });
+            $('.trash').hide();
+            if (files.length > 0) {
+                $('.trash').show();
+            }
+        });
+        $('.trash').on('click', function (e) {
+            e.preventDefault();
+            $.get('/fastleo/filemanager/trash', {files: files}, function () {
+                window.location.reload(false);
+            })
+        });
+    </script>
 
 @endsection

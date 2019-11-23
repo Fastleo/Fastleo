@@ -17,6 +17,7 @@
             /storage{{ substr(session()->get('folder') ?? '', 6) }}
         </div>
         <div class="pull-right">
+            <span class="trash" style="display: none;"><a href="">УДАЛИТЬ ВЫБРАННОЕ</a> /</span>
             <a href="{{ route('fastleo.filemanager.uploads') }}?folder={{ request()->get('folder') ?? '' }}&field={{ request()->get('field') ?? '' }}">Загрузить файл</a> /
             <a href="{{ route('fastleo.filemanager.create') }}?folder={{ request()->get('folder') ?? '' }}&field={{ request()->get('field') ?? '' }}">Создать папку</a>
         </div>

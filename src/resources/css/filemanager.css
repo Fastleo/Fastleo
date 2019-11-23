@@ -26,3 +26,9 @@
     position: relative;
     top: 90px;
 }
+
+.checkbox {
+    position: absolute;
+    top: 10px;
+    margin-left: 120px;
+}
