@@ -16,6 +16,11 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
+        // Проверка существования конфига
+        if (is_null(config('fastleo.exclude'))) {
+            echo 'run console command: php artisan vendor:publish --tag=fastleo --force';
+        }
+
         if ($request->post('email') and $request->post('password')) {
             $user = User::where('email', $request->post('email'))->where('fastleo_admin', 1)->first();
             if (!is_null($user)) {
