@@ -22,9 +22,9 @@
                         @include('fastleo::rows.integer', [$columns, $column, $data, 'row' => $row ?? null])
                     @elseif(in_array($data['type'], ['checkbox', 'boolean']))
                         @include('fastleo::rows.checkbox', [$columns, $column, $data, 'row' => $row ?? null])
-                    @elseif(in_array($data['type'], ['select', 'multiselect']))
+                    @elseif(in_array($data['type'], ['select', 'multiselect']) and isset($data['data']))
                         @include('fastleo::rows.select', [$columns, $column, $data, 'row' => $row ?? null])
-                    @elseif(in_array($data['type'], ['include']))
+                    @elseif(in_array($data['type'], ['include']) and isset($data['data']))
                         @include('fastleo::rows.include', [$columns, $column, $data, 'row' => $row ?? null])
                     @else
                         @include('fastleo::rows.input', [$columns, $column, $data, 'row' => $row ?? null])

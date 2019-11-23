@@ -28,7 +28,7 @@ class ServiceProvider extends BaseServiceProvider
 
         // Проверка существования конфига
         if (is_null(config('fastleo.exclude'))) {
-            dd('run console command: php artisan vendor:publish --tag=fastleo --force');
+            echo 'run console command: php artisan vendor:publish --tag=fastleo --force';
         }
 
         // Список моделей
