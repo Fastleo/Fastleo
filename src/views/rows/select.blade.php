@@ -8,7 +8,6 @@
                     @php $data['data'] = \Fastleo\Fastleo\Helper::str2data($data['data']); @endphp
                 @endif
                 @foreach($data['data'] as $k => $v)
-                    @php isset($data['key']) ? $value = $k : $value = $v; @endphp
                     @if(isset($data['multiple']))
                         <option value="{{ $k }}" @if(isset($row->{$column}) and in_array($k, explode(",", $row->{$column}))){{ 'selected' }}@endif>{{ $v }}</option>
                     @else

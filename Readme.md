@@ -51,13 +51,13 @@
             // example [10,20,30]
             // example 'App\User:id:email:name'
             // example 'Model:key:value:?order?'
-            // example 'Model:key:value:where:?order?'
+            // example 'Model:key:value:where:value:?order?'
             'data' => [],
             'data' => 'Model:key:value',
             
             // if type == include
-            // example 'App\UserImage'
-            'data' => 'Relationships class'
+            'model' => 'Relationship model' // example 'App\UserImages'
+            'relation' => 'Relationship method' // example 'images'
             
         ],
     ];

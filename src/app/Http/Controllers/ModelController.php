@@ -167,8 +167,8 @@ class ModelController extends Controller
             // возможно есть массивы
             foreach ($request->except(config('fastleo.exclude.get_list')) as $k => $value) {
                 if (is_array($value)) {
-                    if (isset($this->columns[$k]['type']) and $this->columns[$k]['type'] == 'include' and isset($this->columns[$k]['data'])) {
-                        $relations[$this->columns[$k]['data']] = $value;
+                    if (isset($this->columns[$k]['type']) and $this->columns[$k]['type'] == 'include' and isset($this->columns[$k]['model'])) {
+                        $relations[$this->columns[$k]['model']] = $value;
                         $request->request->add([$k => null]);
                     } else {
                         $request->request->add([$k => implode(",", $value)]);
@@ -235,8 +235,8 @@ class ModelController extends Controller
             // возможно есть массивы
             foreach ($request->except(config('fastleo.exclude.get_list')) as $k => $value) {
                 if (is_array($value)) {
-                    if (isset($this->columns[$k]['type']) and $this->columns[$k]['type'] == 'include' and isset($this->columns[$k]['data'])) {
-                        $relations[$this->columns[$k]['data']] = $value;
+                    if (isset($this->columns[$k]['type']) and $this->columns[$k]['type'] == 'include' and isset($this->columns[$k]['model'])) {
+                        $relations[$this->columns[$k]['model']] = $value;
                         $request->request->add([$k => null]);
                     } else {
                         $request->request->add([$k => implode(",", $value)]);

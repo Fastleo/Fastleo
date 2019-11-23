@@ -111,23 +111,18 @@ class Helper
      * @param string $string
      * @return object
      */
-    public static function str2model(string $string): object
+    public static function getModelColumns($model): object
     {
-        $class = self::str2class('App\\' . $string, true);
-        if (class_exists($class)) {
-            $class = app($class);
-            $columns = collect(\Schema::getColumnListing($class->getTable()))->flip();
-            $columns = $columns->except(collect(config('fastleo.exclude.row_name')));
-            foreach ($columns as $k => $v) {
-                if (Str::endsWith($k, '_id')) {
-                    $columns->forget($k);
-                } else {
-                    $columns[$k] = $class->fastleo_columns[$k];
-                }
+        $model = new $model();
+        $columns = collect(\Schema::getColumnListing($model->getTable()))->flip();
+        $columns = $columns->except(collect(config('fastleo.exclude.row_name')));
+        foreach ($columns as $k => $v) {
+            if (Str::endsWith($k, '_id')) {
+                $columns->forget($k);
+            } else {
+                $columns[$k] = $model->fastleo_columns[$k];
             }
-            return $columns;
-        } else {
-            return collect();
         }
+        return $columns;
     }
 }

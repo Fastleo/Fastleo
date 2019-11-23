@@ -24,7 +24,7 @@
                         @include('fastleo::rows.checkbox', [$columns, $column, $data, 'row' => $row ?? null])
                     @elseif(in_array($data['type'], ['select', 'multiselect']) and isset($data['data']))
                         @include('fastleo::rows.select', [$columns, $column, $data, 'row' => $row ?? null])
-                    @elseif(in_array($data['type'], ['include']) and isset($data['data']))
+                    @elseif(in_array($data['type'], ['include']) and isset($data['model']) and isset($data['relation']))
                         @include('fastleo::rows.include', [$columns, $column, $data, 'row' => $row ?? null])
                     @else
                         @include('fastleo::rows.input', [$columns, $column, $data, 'row' => $row ?? null])
