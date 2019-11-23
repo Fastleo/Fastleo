@@ -13,7 +13,7 @@
         @endif
 
         @foreach($folders as $folder)
-            <a href="?folder={{ $folder }}&field={{ request()->get('field') }}" title="{{ $folder }}">
+            <a href="?folder={{ $folder }}&field={{ request()->get('field') }}" title="{{ $folder }}" class="position-relative">
                 <div class="block" style="background-image: url({{ asset('storage/fastleo/ico/folder.png') }});">
                     <span class="filename">{{ \Fastleo\Fastleo\Helper::getName($folder) }}</span>
                 </div>
@@ -22,7 +22,7 @@
         @endforeach
 
         @foreach($files as $file)
-            <a href="">
+            <a href="" class="position-relative">
                 <div class="block image" style="background-image: url({{ asset($file['preview']) }});" title="{{ $file['filename'] }}" data-url="/storage{{ substr($file['filename'], 6) }}">
                     <span class="filename">{{ Illuminate\Support\Str::limit(\Fastleo\Fastleo\Helper::getName($file['filename']), 14) }}</span>
                 </div>
