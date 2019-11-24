@@ -59,7 +59,7 @@ class FilemanagerController extends Controller
             $result[$k]['extension'] = $this->extension($file);
             $result[$k]['preview'] = 'storage/fastleo/ico/' . strtolower($result[$k]['extension']) . '.jpg';
 
-            $tmp_filename = str_replace($this->folder, $this->folder . '/thumbs', $file);
+            $tmp_filename = str_replace($this->folder, $this->folder . '/thumbs', str_replace(' ', '_', $file));
             if (file_exists(base_path('storage/app/' . strtolower($tmp_filename)))) {
                 $result[$k]['preview'] = 'storage' . substr(strtolower($tmp_filename), 6);
             }
@@ -111,7 +111,7 @@ class FilemanagerController extends Controller
         $files = $request->file('files');
         if (isset($files) and count($files) > 0) {
             foreach ($files as $file) {
-                $name = $file->getClientOriginalName();
+                $name = str_replace(' ', '_', $file->getClientOriginalName());
                 $file->move($this->path, strtolower($name));
                 if (in_array(strtolower($file->getClientOriginalExtension()), config('fastleo.images'))) {
                     Image::make($this->path . '/' . strtolower($name))->resize(122, 91)->save($this->path . '/thumbs/' . strtolower($name));
@@ -169,7 +169,9 @@ class FilemanagerController extends Controller
             if (in_array($file['extension'], config('fastleo.images'))) {
                 $tmp_filename = str_replace($this->folder, $this->folder . '/thumbs', strtolower($file['filename']));
                 if (!file_exists(base_path('storage/app/' . $tmp_filename))) {
-                    Image::make(base_path('storage/app/' . $file['filename']))->resize(122, 91)->save(base_path('storage/app/' . $tmp_filename));
+                    Image::make(base_path('storage/app/' . $file['filename']))
+                        ->resize(122, 91)
+                        ->save(base_path('storage/app/' . str_replace(' ', '_', $tmp_filename)));
                 }
             }
         }
