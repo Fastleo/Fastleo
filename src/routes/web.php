@@ -17,10 +17,11 @@ Route::group(['prefix' => 'fastleo', 'middleware' => ['web']], function () {
     Route::get('users/delete/{user_id}', 'Fastleo\Fastleo\UserController@delete')->where('user_id', '[0-9]+')->name('fastleo.users.delete');
 
     // FileManager
-    Route::get('filemanager', 'Fastleo\Fastleo\FilemanagerController@index')->name('fastleo.filemanager');
+    Route::any('filemanager', 'Fastleo\Fastleo\FilemanagerController@index')->name('fastleo.filemanager');
     Route::any('filemanager/trash', 'Fastleo\Fastleo\FilemanagerController@trash')->name('fastleo.filemanager.trash');
-    Route::any('filemanager/create', 'Fastleo\Fastleo\FilemanagerController@create')->name('fastleo.filemanager.create');
-    Route::any('filemanager/uploads', 'Fastleo\Fastleo\FilemanagerController@uploads')->name('fastleo.filemanager.uploads');
+    Route::any('filemanager/preview', 'Fastleo\Fastleo\FilemanagerController@preview')->name('fastleo.filemanager.preview');
+    Route::post('filemanager/create', 'Fastleo\Fastleo\FilemanagerController@create')->name('fastleo.filemanager.create');
+    Route::post('filemanager/uploads', 'Fastleo\Fastleo\FilemanagerController@uploads')->name('fastleo.filemanager.uploads');
 
     // Models
     Route::get('app/{model}', 'Fastleo\Fastleo\ModelController@index')->name('fastleo.model');

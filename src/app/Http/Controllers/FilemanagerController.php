@@ -55,17 +55,13 @@ class FilemanagerController extends Controller
     {
         $files = Storage::files($this->folder);
         foreach ($files as $k => $file) {
-
             $result[$k]['filename'] = $file;
             $result[$k]['extension'] = $this->extension($file);
-            $result[$k]['preview'] = 'storage/fastleo/ico/' . $result[$k]['extension'] . '.jpg';
+            $result[$k]['preview'] = 'storage/fastleo/ico/' . strtolower($result[$k]['extension']) . '.jpg';
 
-            if (in_array($result[$k]['extension'], config('fastleo.images'))) {
-                $tmp_filename = str_replace($this->folder, $this->folder . '/thumbs', $file);
-                if (!file_exists(base_path('storage/app/' . $tmp_filename))) {
-                    Image::make(base_path('storage/app/' . $file))->resize(122, 91)->save(base_path('storage/app/' . $tmp_filename));
-                }
-                $result[$k]['preview'] = 'storage/' . substr($tmp_filename, 6);
+            $tmp_filename = str_replace($this->folder, $this->folder . '/thumbs', $file);
+            if (file_exists(base_path('storage/app/' . strtolower($tmp_filename)))) {
+                $result[$k]['preview'] = 'storage' . substr(strtolower($tmp_filename), 6);
             }
         }
         return collect($result ?? []);
@@ -97,7 +93,7 @@ class FilemanagerController extends Controller
     public function index(Request $request)
     {
         $this->construct($request);
-        return view('fastleo::filemanager/index', [
+        return view('fastleo::filemanager-index', [
             'folders' => $this->getFolders(),
             'files' => $this->getFiles(),
             'up' => $this->getFolderUp(),
@@ -116,14 +112,13 @@ class FilemanagerController extends Controller
         if (isset($files) and count($files) > 0) {
             foreach ($files as $file) {
                 $name = $file->getClientOriginalName();
-                $file->move($this->path, $name);
+                $file->move($this->path, strtolower($name));
                 if (in_array(strtolower($file->getClientOriginalExtension()), config('fastleo.images'))) {
-                    Image::make($this->path . '/' . $name)->resize(122, 91)->save($this->path . '/thumbs/' . $name);
+                    Image::make($this->path . '/' . strtolower($name))->resize(122, 91)->save($this->path . '/thumbs/' . strtolower($name));
                 }
             }
-            return redirect(route('fastleo.filemanager') . '?' . $request->getQueryString());
         }
-        return view('fastleo::filemanager/uploads');
+        return redirect(route('fastleo.filemanager') . '?' . $request->getQueryString());
     }
 
     /**
@@ -138,9 +133,8 @@ class FilemanagerController extends Controller
             $folder_name = Str::slug($request->post('folder_name'), '_');
             File::makeDirectory(base_path('storage/app/' . $this->folder . '/' . $folder_name), 0777);
             File::makeDirectory(base_path('storage/app/' . $this->folder . '/' . $folder_name . '/thumbs'), 0777);
-            return redirect(route('fastleo.filemanager') . '?' . $request->getQueryString());
         }
-        return view('fastleo::filemanager/create');
+        return redirect(route('fastleo.filemanager') . '?' . $request->getQueryString());
     }
 
     /**
@@ -159,5 +153,26 @@ class FilemanagerController extends Controller
                 }
             }
         }
+    }
+
+    /**
+     * Обновляет превью для изображений
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function preview(Request $request)
+    {
+        $this->construct($request);
+        Storage::deleteDirectory($this->folder . '/thumbs');
+        File::makeDirectory(base_path('storage/app/' . $this->folder . '/thumbs'), 0777);
+        foreach ($this->getFiles() as $file) {
+            if (in_array($file['extension'], config('fastleo.images'))) {
+                $tmp_filename = str_replace($this->folder, $this->folder . '/thumbs', strtolower($file['filename']));
+                if (!file_exists(base_path('storage/app/' . $tmp_filename))) {
+                    Image::make(base_path('storage/app/' . $file['filename']))->resize(122, 91)->save(base_path('storage/app/' . $tmp_filename));
+                }
+            }
+        }
+        return redirect(route('fastleo.filemanager') . '?' . $request->getQueryString());
     }
 }

@@ -12,14 +12,12 @@
 <body>
 @if(session()->has('fastleo'))
     <nav class="navbar navbar-light navbar-dark bg-dark flex-md-nowrap fastleo-nav">
-        <a href="{{ route('fastleo.filemanager') }}" class="navbar-brand">Fastleo Filemanager</a>
-        <div class="pull-center">
-            /storage{{ substr(session()->get('folder') ?? '', 6) }}
-        </div>
+        <a href="{{ route('fastleo.filemanager') }}">Fastleo Filemanager /storage{{ substr(session()->get('folder') ?? '', 6) }}</a>
         <div class="pull-right">
-            <span class="trash" style="display: none;"><a href="">УДАЛИТЬ ВЫБРАННОЕ</a> /</span>
-            <a href="{{ route('fastleo.filemanager.uploads') }}?folder={{ request()->get('folder') ?? '' }}&field={{ request()->get('field') ?? '' }}">Загрузить файл</a> /
-            <a href="{{ route('fastleo.filemanager.create') }}?folder={{ request()->get('folder') ?? '' }}&field={{ request()->get('field') ?? '' }}">Создать папку</a>
+            <span class="trash" style="display: none;"><a href="">Удалить</a> /</span>
+            <a href="{{ route('fastleo.filemanager.preview') }}?folder={{ request()->get('folder') ?? '' }}&field={{ request()->get('field') ?? '' }}">Обновить превью</a> /
+            <a href="#" data-toggle="modal" data-target="#upload">Загрузить файл</a> /
+            <a href="#" data-toggle="modal" data-target="#create">Создать папку</a>
         </div>
     </nav>
     <div class="container-fluid">
@@ -29,7 +27,50 @@
             </div>
         </div>
     </div>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>
+    <div class="modal fade" id="upload" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form action="{{ route('fastleo.filemanager.uploads') }}?folder={{ request()->get('folder') ?? '' }}&field={{ request()->get('field') ?? '' }}" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            {{ csrf_field() }}
+                            <label for="files">Выберите файлы для загрузки</label>
+                            <div class="row">
+                                <div class="col-8">
+                                    <input type="file" name="files[]" class="form-control-file" id="files" multiple>
+                                </div>
+                                <div class="col-4">
+                                    <button type="submit" class="btn btn-primary">Загрузить</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="create" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form action="{{ route('fastleo.filemanager.create') }}?folder={{ request()->get('folder') ?? '' }}&field={{ request()->get('field') ?? '' }}" method="post">
+                        <div class="form-group">
+                            {{ csrf_field() }}
+                            <label for="files">Введите название папки на английском языке, в качестве пробела используйте нижний пробел _</label>
+                            <div class="row">
+                                <div class="col-8">
+                                    <input type="text" name="folder_name" class="form-control" placeholder="folder">
+                                </div>
+                                <div class="col-4">
+                                    <button type="submit" class="form-control btn btn-primary">Создать папку</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 @endif
 </body>
