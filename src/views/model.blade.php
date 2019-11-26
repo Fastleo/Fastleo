@@ -80,7 +80,16 @@
                                 @if(!isset($t['visible']) or $t['visible'] == true)
                                     @if(!in_array($c, config('fastleo.exclude.list_name')))
                                         <td>
-                                            <a href="/fastleo/app/{{ $name }}/edit/{{ $row->id }}?{{ request()->getQueryString() }}">{{ $row->{$c} }}</a>
+                                            @if(Str::endsWith($c, '_id'))
+                                                @php $method = substr($c, 0, -3); @endphp
+                                                @if(method_exists($row, $method))
+                                                    <a href="/fastleo/app/{{ $name }}/edit/{{ $row->id }}?{{ request()->getQueryString() }}">
+                                                        {{ $row->{$method}->title ?? $row->{$method}->name ?? $row->{$c} }}
+                                                    </a>
+                                                @endif
+                                            @else
+                                                <a href="/fastleo/app/{{ $name }}/edit/{{ $row->id }}?{{ request()->getQueryString() }}">{{ $row->{$c} }}</a>
+                                            @endif
                                         </td>
                                     @endif
                                 @endif
