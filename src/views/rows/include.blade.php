@@ -28,6 +28,11 @@
                         </div>
                         @if(isset($relation['type']) and $relation['type'] == 'text')
                             <textarea name="{{ $column }}[{{ $iteration }}][{{ $col }}]" id="{{ $col }}{{ $i }}" class="form-control" rows="3" placeholder="{{ $relation['placeholder'] ?? '' }}">{{ $v->{$col} ?? '' }}</textarea>
+                        @elseif(isset($relation['type']) and $relation['type'] == 'checkbox')
+                            <div class="form-check">
+                                <input type="hidden" name="{{ $column }}[{{ $iteration }}][{{ $col }}]" value="0">
+                                <input type="checkbox" name="{{ $column }}[{{ $iteration }}][{{ $col }}]" class="form-check-input" id="{{ $col }}{{ $i }}" value="1" {{ (isset($v->{$col}) and $v->{$col} == 1) ? 'checked' : null }}>
+                            </div>
                         @else
                             <input type="{{ $relation['type'] ?? 'text' }}" name="{{ $column }}[{{ $iteration }}][{{ $col }}]" id="{{ $col }}{{ $i }}" data-name="{{ $col }}" class="form-control" placeholder="{{ $relation['placeholder'] ?? '' }}" value="{{ $v->{$col} ?? '' }}">
                             @if(isset($relation['media']) and isset($v->{$col}) and $v->{$col} != '')
