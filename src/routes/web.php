@@ -35,6 +35,6 @@ Route::group(['prefix' => 'fastleo', 'middleware' => ['web']], function () {
     Route::get('app/{model}/down/{row_id}', 'Fastleo\Fastleo\ModelController@down')->where('row_id', '[0-9]+')->name('fastleo.model.down');
     Route::get('app/{model}/menu/{row_id}', 'Fastleo\Fastleo\ModelController@menu')->where('row_id', '[0-9]+')->name('fastleo.model.menu');
     Route::any('app/{model}/edit/{row_id}', 'Fastleo\Fastleo\ModelController@edit')->where('row_id', '[0-9]+')->name('fastleo.model.edit');
-    Route::get('app/{model}/delete/{row_id}', 'Fastleo\Fastleo\ModelController@delete')->where('row_id', '[0-9]+')->name('fastleo.model.delete');
+    Route::get('app/{model}/delete/{row_id}/{die?}', 'Fastleo\Fastleo\ModelController@delete')->where('row_id', '[0-9]+')->name('fastleo.model.delete');
 
 });

@@ -253,9 +253,12 @@ class ModelController extends Controller
             if (isset($relations)) {
                 foreach ($relations as $name => $value) {
                     $manyApp = app($name);
-                    $manyApp::where(Helper::method2str($this->namespace) . '_id', $row_id)->delete();
                     foreach ($value as $val) {
-                        $many = new $manyApp;
+                        if ($val['id'] > 0) {
+                            $many = ($manyApp)::find($val['id']);
+                        } else {
+                            $many = new $manyApp;
+                        }
                         $many->{Helper::method2str($this->namespace) . '_id'} = $row_id;
                         foreach ($val as $c => $v) {
                             $many->{$c} = $v;
@@ -293,16 +296,24 @@ class ModelController extends Controller
      * @param Request $request
      * @param $model
      * @param $row_id
+     * @param $die
+     * @return bool
      */
-    public function delete(Request $request, $model, $row_id)
+    public function delete(Request $request, $model, $row_id, $die = false)
     {
+        $row = $this->app->where('id', $row_id)->first();
         if (isset($this->columns['sort'])) {
-            $row = $this->app->where('id', $row_id)->first();
+            if (is_null($row->sort)) {
+                $this->sortingFix($request, $model);
+            }
             $this->app->where('sort', '>', $row->sort)->decrement('sort');
         }
-        $this->app->where('id', $row_id)->delete();
-        header('Location: ' . route('fastleo.model', [$model]) . '?' . $request->getQueryString());
-        die;
+        $this->app->where('id', $row->id)->delete();
+        if ($die == false) {
+            header('Location: ' . route('fastleo.model', [$model]) . '?' . $request->getQueryString());
+            die;
+        }
+        return true;
     }
 
     /**

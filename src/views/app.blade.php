@@ -157,16 +157,20 @@
         });
 
         $('.delInput').on('click', function () {
+            var id = $(this).attr('data-id');
+            var model = $(this).attr('data-model');
             var div = $(this).closest('.include');
-            var name = div.find('input').attr('data-name');
             var include = $('.include').length;
             if (include > 1) {
                 div.hide(500, function () {
-                    div.remove();
+                    $.get('/fastleo/app/' + model + '/delete/' + id + '/true', function () {
+                        div.remove();
+                    });
                 });
             }
             return false;
         });
+
     });
 </script>
 </body>
