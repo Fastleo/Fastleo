@@ -17,7 +17,7 @@
     @php $iteration = $loop->index; $j = 0 @endphp
     <div class="include">
         @foreach($relations as $col => $relation)
-            @if($j == 0)<input type="hidden" name="{{ $column }}[{{ $iteration }}][id]" value="{{ $v->id }}">@endif
+            @if($j == 0)<input type="hidden" name="{{ $column }}[{{ $iteration }}][id]" value="{{ $v->id ?? '' }}">@endif
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">{{ $relation['title'] ?? $data['title'] ?? ucfirst($column) }}:</label>
                 <div class="col-sm-7">
@@ -47,7 +47,7 @@
                                 <span class="input-group-text addInput">+</span>
                             </div>
                             <div class="input-group-append">
-                                <span class="input-group-text delInput" data-model="{{ class_basename($data['model']) }}" data-id="{{ $v->id }}">-</span>
+                                <span class="input-group-text delInput" data-model="{{ class_basename($data['model']) }}" data-id="{{ $v->id ?? '' }}">-</span>
                             </div>
                         @endif
                     </div>

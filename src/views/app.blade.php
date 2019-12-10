@@ -133,20 +133,22 @@
 
         $('.addInput').on('click', function () {
 
-            var div = $(this).closest('.include');
-            var divCopy = div.clone(true);
+            let div = $(this).closest('.include');
+            let divCopy = div.clone(true);
 
             divCopy.find('input, textarea').val('');
             div.after(divCopy);
 
-            $('.include').each(function (index, value) {
+            let include = $('.include');
+
+            include.each(function (index, value) {
                 $(this).find('input, textarea').each(function (i, v) {
                     var input = $(this).attr('name');
                     $(this).attr('name', input.replace(/\d+/g, index));
                 });
             });
 
-            $('.include').find('input').each(function (index, value) {
+            include.find('input').each(function (index, value) {
                 var id = $(this).attr('id');
                 $(this).attr('id', id.replace(/\d+/g, index));
                 var filemanager = $(this).prev('.filemanager').attr('data-src');
@@ -157,11 +159,11 @@
         });
 
         $('.delInput').on('click', function () {
-            var id = $(this).attr('data-id');
-            var model = $(this).attr('data-model');
-            var div = $(this).closest('.include');
-            var include = $('.include').length;
-            if (include > 1) {
+            let id = $(this).attr('data-id');
+            let model = $(this).attr('data-model');
+            let div = $(this).closest('.include');
+            let include = $('.include').length;
+            if (include > 1 && id > 0) {
                 div.hide(500, function () {
                     $.get('/fastleo/app/' + model + '/delete/' + id + '/true', function () {
                         div.remove();
