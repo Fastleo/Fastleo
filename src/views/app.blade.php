@@ -143,16 +143,20 @@
 
             include.each(function (index, value) {
                 $(this).find('input, textarea').each(function (i, v) {
-                    var input = $(this).attr('name');
+                    let input = $(this).attr('name');
                     $(this).attr('name', input.replace(/\d+/g, index));
                 });
             });
 
             include.find('input').each(function (index, value) {
-                var id = $(this).attr('id');
-                $(this).attr('id', id.replace(/\d+/g, index));
-                var filemanager = $(this).prev('.filemanager').attr('data-src');
-                $(this).prev('.filemanager').attr('data-src', filemanager.replace(/\d+/g, index));
+                let id = $(this).attr('id');
+                let filemanager = $(this).prev('.filemanager').attr('data-src');
+                if (id) {
+                    $(this).attr('id', id.replace(/\d+/g, index));
+                }
+                if (filemanager) {
+                    $(this).prev('.filemanager').attr('data-src', filemanager.replace(/\d+/g, index));
+                }
             });
 
             return false;
@@ -163,12 +167,16 @@
             let model = $(this).attr('data-model');
             let div = $(this).closest('.include');
             let include = $('.include').length;
-            if (include > 1 && id > 0) {
-                div.hide(500, function () {
-                    $.get('/fastleo/app/' + model + '/delete/' + id + '/true', function () {
-                        div.remove();
+            if (include > 1) {
+                if (id > 0) {
+                    div.hide(500, function () {
+                        $.get('/fastleo/app/' + model + '/delete/' + id + '/true', function () {
+                            div.remove();
+                        });
                     });
-                });
+                } else {
+                    div.remove();
+                }
             }
             return false;
         });

@@ -259,11 +259,13 @@ class ModelController extends Controller
                         } else {
                             $many = new $manyApp;
                         }
-                        $many->{Helper::method2str($this->namespace) . '_id'} = $row_id;
-                        foreach ($val as $c => $v) {
-                            $many->{$c} = $v;
+                        if (!is_null($many)) {
+                            $many->{Helper::method2str($this->namespace) . '_id'} = $row_id;
+                            foreach ($val as $c => $v) {
+                                $many->{$c} = $v;
+                            }
+                            $many->save();
                         }
-                        $many->save();
                     }
                 }
             }
@@ -297,11 +299,14 @@ class ModelController extends Controller
      * @param $model
      * @param $row_id
      * @param $die
-     * @return bool
+     * @return string
      */
     public function delete(Request $request, $model, $row_id, $die = false)
     {
         $row = $this->app->where('id', $row_id)->first();
+        if (is_null($row)) {
+            return '1';
+        }
         if (isset($this->columns['sort'])) {
             if (is_null($row->sort)) {
                 $this->sortingFix($request, $model);
@@ -313,7 +318,7 @@ class ModelController extends Controller
             header('Location: ' . route('fastleo.model', [$model]) . '?' . $request->getQueryString());
             die;
         }
-        return true;
+        return '1';
     }
 
     /**
