@@ -135,6 +135,7 @@ class FilemanagerController extends Controller
                             $image->insert(base_path($watermark), 'center');
                         }
                     }
+                    $image->save();
                     $image->resize(122, 91);
                     $image->save($this->path . '/thumbs/' . strtolower($name));
                 }
