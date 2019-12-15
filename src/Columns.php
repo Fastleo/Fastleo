@@ -36,18 +36,6 @@ class Columns
     }
 
     /**
-     * @param string $model
-     * @param Closure $columns
-     */
-    public static function create(string $model, Closure $columns)
-    {
-        $user = new self($model);
-        $columns($user);
-
-        dd($user->getColumn());
-    }
-
-    /**
      * @param string $type
      * @param $name
      */

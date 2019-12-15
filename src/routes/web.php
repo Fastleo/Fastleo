@@ -10,6 +10,9 @@ Route::group(['prefix' => 'fastleo', 'middleware' => ['web']], function () {
     Route::get('info', 'Fastleo\Fastleo\InfoController@index')->name('fastleo.info');
     Route::get('info/clear', 'Fastleo\Fastleo\InfoController@clear')->name('fastleo.info.clear');
 
+    // Setting
+    Route::any('setting', 'Fastleo\Fastleo\SettingController@setting')->name('fastleo.setting');
+
     // Users
     Route::get('users', 'Fastleo\Fastleo\UserController@users')->name('fastleo.users');
     Route::any('users/add', 'Fastleo\Fastleo\UserController@add')->name('fastleo.users.add');

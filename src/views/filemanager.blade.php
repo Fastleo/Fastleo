@@ -38,6 +38,7 @@
                             <div class="row">
                                 <div class="col-8">
                                     <input type="file" name="files[]" class="form-control-file" id="files" multiple>
+                                    <input type="checkbox" name="watermark" value="1"> добавить водяной знак
                                 </div>
                                 <div class="col-4">
                                     <button type="submit" class="btn btn-primary">Загрузить</button>

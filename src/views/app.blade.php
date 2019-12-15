@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Fastleo Admin Panel</title>
-    <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.11.1/css/all.css">
+    <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.12.0/css/all.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css">
     <link rel="stylesheet" href="{{ asset('storage/fastleo/css/admin.css') }}">
@@ -27,10 +27,14 @@
             <ul class="nav flex-column">
                 @if(session()->has('fastleo'))
                     <li class="nav-item">
-                        <a href="{{ route('fastleo.info') }}" class="nav-link"><i class="fas fa-home"></i> Информация</a>
+                        <a href="{{ route('fastleo.info') }}" class="nav-link {{ request()->is('fastleo/info') ? 'active' : '' }}">
+                            <i class="fas fa-home"></i> Информация
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('fastleo.users') }}" class="nav-link"><i class="fas fa-users"></i> Пользователи</a>
+                        <a href="{{ route('fastleo.users') }}" class="nav-link {{ request()->is('fastleo/users') ? 'active' : '' }}">
+                            <i class="fas fa-users"></i> Пользователи
+                        </a>
                     </li>
                     @foreach(app()->models as $model => $class)
                         @if($class->fastleo)
@@ -41,6 +45,11 @@
                             </li>
                         @endif
                     @endforeach
+                    <li class="nav-item">
+                        <a href="{{ route('fastleo.setting') }}" class="nav-link {{ request()->is('fastleo/setting') ? 'active' : '' }}">
+                            <i class="fas fa-cog"></i> Настройки
+                        </a>
+                    </li>
                 @endif
                 <li class="nav-item">
                     <br>
@@ -77,7 +86,7 @@
 
 <script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>
-<script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="//stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.9.6/tinymce.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>

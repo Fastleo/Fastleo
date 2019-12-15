@@ -15,6 +15,15 @@ class FilemanagerController extends Controller
 
     public $path;
 
+    public $setting;
+
+    public function __construct()
+    {
+        $this->setting = FastleoSetting::get()->keyBy('key')->map(function ($item) {
+            return $item->value;
+        });
+    }
+
     /**
      * FilemanagerController constructor.
      * @param Request $request
@@ -45,7 +54,10 @@ class FilemanagerController extends Controller
      */
     public function getFolders()
     {
-        return collect(Storage::directories($this->folder))->flip()->except($this->folder . '/thumbs')->flip();
+        return collect(Storage::directories($this->folder))
+            ->flip()
+            ->except($this->folder . '/thumbs')
+            ->flip();
     }
 
     /**
@@ -68,11 +80,13 @@ class FilemanagerController extends Controller
     }
 
     /**
-     * @return array
+     * @return string
      */
     public function getFolderUp()
     {
-        return collect(explode("/", $this->folder))->slice(0, -1)->implode('/');
+        return collect(explode("/", $this->folder))
+            ->slice(0, -1)
+            ->implode('/');
     }
 
     /**
@@ -103,7 +117,7 @@ class FilemanagerController extends Controller
     /**
      * Uploads files
      * @param Request $request
-     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function uploads(Request $request)
     {
@@ -114,7 +128,15 @@ class FilemanagerController extends Controller
                 $name = str_replace(' ', '_', $file->getClientOriginalName());
                 $file->move($this->path, strtolower($name));
                 if (in_array(strtolower($file->getClientOriginalExtension()), config('fastleo.images'))) {
-                    Image::make($this->path . '/' . strtolower($name))->resize(122, 91)->save($this->path . '/thumbs/' . strtolower($name));
+                    $image = Image::make($this->path . '/' . strtolower($name));
+                    if ($request->has('watermark') and isset($this->setting['watermark']) and $this->setting['watermark'] != '') {
+                        $watermark = str_replace('/storage/uploads', 'storage/app/public/uploads', $this->setting['watermark']);
+                        if (is_file(base_path($watermark))) {
+                            $image->insert(base_path($watermark), 'center');
+                        }
+                    }
+                    $image->resize(122, 91);
+                    $image->save($this->path . '/thumbs/' . strtolower($name));
                 }
             }
         }
@@ -124,7 +146,7 @@ class FilemanagerController extends Controller
     /**
      * Создание директории
      * @param Request $request
-     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function create(Request $request)
     {
@@ -169,9 +191,9 @@ class FilemanagerController extends Controller
             if (in_array($file['extension'], config('fastleo.images'))) {
                 $tmp_filename = str_replace($this->folder, $this->folder . '/thumbs', strtolower($file['filename']));
                 if (!file_exists(base_path('storage/app/' . $tmp_filename))) {
-                    Image::make(base_path('storage/app/' . $file['filename']))
-                        ->resize(122, 91)
-                        ->save(base_path('storage/app/' . str_replace(' ', '_', $tmp_filename)));
+                    $image = Image::make(base_path('storage/app/' . $file['filename']));
+                    $image->resize(122, 91);
+                    $image->save(base_path('storage/app/' . str_replace(' ', '_', $tmp_filename)));
                 }
             }
         }
