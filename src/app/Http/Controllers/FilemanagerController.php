@@ -133,6 +133,14 @@ class FilemanagerController extends Controller
                         $watermark = str_replace('/storage/uploads', 'storage/app/public/uploads', $this->setting['watermark']);
                         if (is_file(base_path($watermark))) {
                             $image->insert(base_path($watermark), 'center');
+                        } else {
+                            $image->text($this->setting['watermark'], $image->getWidth() / 2, $image->getHeight() / 2, function ($font) {
+                                $font->file(base_path('storage/app/public/fastleo/font/roboto.ttf'));
+                                $font->color(array(255, 255, 255, 0.5));
+                                $font->size(30);
+                                $font->align('center');
+                                $font->valign('middle');
+                            });
                         }
                     }
                     $image->save();

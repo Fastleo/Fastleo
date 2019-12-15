@@ -13,7 +13,7 @@
                     <div class="input-group-prepend filemanager" data-src="/fastleo/filemanager?field=watermark">
                         <div class="input-group-text"><i class="fas fa-folder-open"></i></div>
                     </div>
-                    <input type="text" id="watermark" name="watermark" class="form-control" placeholder="ссылка на водяной знак" value="{{ $setting['watermark'] ?? '' }}">
+                    <input type="text" id="watermark" name="watermark" class="form-control" placeholder="ссылка на водяной знак или текст водяного знака" value="{{ $setting['watermark'] ?? '' }}">
                     @if(isset($setting['watermark']) and $setting['watermark'] != '')
                         <div class="input-group-append tt" data-html="true" title="<img src='{{ $setting['watermark'] ?? '' }}' width='182'>">
                             <span class="input-group-text"><i class="fas fa-image"></i></span>

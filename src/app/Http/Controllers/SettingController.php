@@ -12,7 +12,7 @@ class SettingController extends Controller
         if ($request->isMethod('post')) {
             foreach ($request->except(['_token']) as $key => $value) {
                 FastleoSetting::updateOrInsert(
-                    ['key' => $key, 'value' => $value]
+                    ['key' => $key], ['value' => $value]
                 );
             }
         }

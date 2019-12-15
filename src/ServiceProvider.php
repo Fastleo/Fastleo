@@ -17,6 +17,7 @@ class ServiceProvider extends BaseServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 FastleoClear::class,
+                FastleoResource::class,
                 FastleoUser::class,
             ]);
         }

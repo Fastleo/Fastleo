@@ -15,8 +15,8 @@ class CreateFastleoSettingsTable extends Migration
     {
         Schema::create('fastleo_settings', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('key');
-            $table->string('value');
+            $table->string('key')->index()->nullable();
+            $table->string('value')->nullable();
         });
     }
 
