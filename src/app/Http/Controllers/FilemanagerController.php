@@ -128,7 +128,14 @@ class FilemanagerController extends Controller
                 $name = str_replace(' ', '_', $file->getClientOriginalName());
                 $file->move($this->path, strtolower($name));
                 if (in_array(strtolower($file->getClientOriginalExtension()), config('fastleo.images'))) {
-                    $image = Image::make($this->path . '/' . strtolower($name));
+                    $image = Image::make($this->path . '/' . strtolower($name))->orientate();
+                    if ($request->has('resize') and $image->getWidth() > 1024) {
+                        $image->rotate(0);
+                        $image->resize(1024, null, function ($constraint) {
+                            $constraint->aspectRatio();
+                            $constraint->upsize();
+                        });
+                    }
                     if ($request->has('watermark') and isset($this->setting['watermark']) and $this->setting['watermark'] != '') {
                         $watermark = str_replace('/storage/uploads', 'storage/app/public/uploads', $this->setting['watermark']);
                         if (is_file(base_path($watermark))) {
