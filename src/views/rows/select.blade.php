@@ -2,7 +2,7 @@
     <label class="col-sm-2 col-form-label" for="{{ $column }}">{{ $data['title'] ?? ucfirst($column) }}:</label>
     <div class="col-sm-9">
         <select class="form-control col-6 select2" id="{{ $column }}" {!! !empty($data['multiple']) ? 'name="'.$column.'[]" multiple' : 'name="'.$column.'"'!!}>
-            <option value="0">---</option>
+            <option value="">---</option>
             @if($data['data'])
                 @if(!is_array($data['data']))
                     @php $data['data'] = \Fastleo\Fastleo\Helper::str2data($data['data']); @endphp
