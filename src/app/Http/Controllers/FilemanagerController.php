@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
+use Fresh\Transliteration\Transliterator;
+use Fresh\Transliteration\RussianToEnglish;
 
 class FilemanagerController extends Controller
 {
@@ -125,7 +127,7 @@ class FilemanagerController extends Controller
         $files = $request->file('files');
         if (isset($files) and count($files) > 0) {
             foreach ($files as $file) {
-                $name = str_replace(' ', '_', $file->getClientOriginalName());
+                $name = RussianToEnglish::transliterate(str_replace(' ', '_', $file->getClientOriginalName()));
                 $file->move($this->path, strtolower($name));
                 if (in_array(strtolower($file->getClientOriginalExtension()), config('fastleo.images'))) {
                     $image = Image::make($this->path . '/' . strtolower($name))->orientate();
