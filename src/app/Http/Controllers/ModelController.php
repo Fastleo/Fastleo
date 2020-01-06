@@ -206,7 +206,7 @@ class ModelController extends Controller
         }
 
         // Исключаем нередактируемые поля
-        $this->columns = Illuminate\Support\Arr::except($this->columns, config('fastleo.exclude.row_name'));
+        $this->columns = \Arr::except($this->columns, config('fastleo.exclude.row_name'));
 
         // view
         return view('fastleo::model-edit', [
@@ -283,7 +283,7 @@ class ModelController extends Controller
         $row = $this->app::where('id', $row_id)->first();
 
         // Исключаем нередактируемые поля
-        $this->columns = Illuminate\Support\Arr::except($this->columns, config('fastleo.exclude.row_name'));
+        $this->columns = \Arr::except($this->columns, config('fastleo.exclude.row_name'));
 
         return view('fastleo::model-edit', [
             'row' => $row,

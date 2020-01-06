@@ -25,7 +25,7 @@
             <a href="" class="position-relative">
                 <div class="block image" style="background-image: url({{ asset($file['preview']) }}); cursor: pointer;" title="{{ $file['filename'] }}" data-url="/storage{{ substr($file['filename'], 6) }}">
                     <span class="filename">
-                        {{ Illuminate\Support\Str::limit(\Fastleo\Fastleo\Helper::getName($file['filename']), 14) }}
+                        {{ \Str::limit(\Fastleo\Fastleo\Helper::getName($file['filename']), 14) }}
                     </span>
                 </div>
                 <input type="checkbox" class="checkbox" value="{{ $file['filename'] }}">
