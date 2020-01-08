@@ -2,8 +2,6 @@
 
 namespace Fastleo\Fastleo;
 
-use Illuminate\Support\Str;
-
 class Helper
 {
     /**
@@ -14,8 +12,7 @@ class Helper
     public static function getName(string $string): string
     {
         $array = explode('/', $string);
-        $result = end($array);
-        return $result;
+        return end($array);
     }
 
     /**
@@ -25,12 +22,13 @@ class Helper
      */
     public static function str2method(string $string): string
     {
-        return Str::camel($string);
+        return \Illuminate\Support\Str::camel($string);
     }
 
     /**
      * Преобразования строки в название класса
      * @param string $string
+     * @param bool $cut
      * @return string
      */
     public static function str2class(string $string, bool $cut = false): string
@@ -38,7 +36,7 @@ class Helper
         if ($cut) {
             $string = substr($string, 0, -1);
         }
-        return Str::studly($string);
+        return \Illuminate\Support\Str::studly($string);
     }
 
     /**
@@ -49,7 +47,7 @@ class Helper
     public static function method2str(string $string): string
     {
         $string = class_basename($string);
-        return Str::snake($string);
+        return \Illuminate\Support\Str::snake($string);
     }
 
     /**
@@ -108,21 +106,42 @@ class Helper
 
     /**
      * Прсмотр полей для редактирования в модели по ее названию
-     * @param string $string
+     * @param string $model
      * @return object
      */
     public static function getModelColumns($model): object
     {
         $model = new $model();
-        $columns = collect(\Schema::getColumnListing($model->getTable()))->flip();
+        $columns = collect(\Illuminate\Support\Facades\Schema::getColumnListing($model->getTable()))->flip();
         $columns = $columns->except(collect(config('fastleo.exclude.row_name')));
         foreach ($columns as $k => $v) {
-            if (Str::endsWith($k, '_id')) {
+            if (\Illuminate\Support\Str::endsWith($k, '_id')) {
                 $columns->forget($k);
             } else {
                 $columns[$k] = $model->fastleo_columns[$k];
             }
         }
         return $columns;
+    }
+
+    /**
+     * Основное меню
+     * @param array $models
+     * @param array $menu
+     * @return array
+     */
+    public static function getMenu(array $models, array $menu = []): array
+    {
+        foreach ($models as $model => $data) {
+            if ($data->fastleo) {
+                if ($data->fastleo_group) {
+                    $menu[$data->fastleo_group][$data->fastleo] = $model;
+                } else {
+                    $menu[$data->fastleo] = $model;
+                }
+            }
+        }
+        ksort($menu);
+        return $menu;
     }
 }

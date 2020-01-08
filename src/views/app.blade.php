@@ -36,11 +36,24 @@
                             <i class="fas fa-users"></i> Пользователи
                         </a>
                     </li>
-                    @foreach(app()->models as $model => $class)
-                        @if($class->fastleo)
+                    @foreach(app()->menu as $title => $model)
+                        @if(is_array($model))
+                            <li class="nav-item dropdown">
+                                <a href="" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-bars"></i> {{ $title }}
+                                </a>
+                                <div class="dropdown-menu">
+                                    @foreach($model as $t => $m)
+                                        <a class="nav-link {{ request()->is('fastleo/app/'. $m) ? 'active' : '' }}" href="/fastleo/app/{{ $m }}">
+                                            <i class="fas fa-list"></i> {{ $t }}
+                                        </a>
+                                    @endforeach
+                                </div>
+                            </li>
+                        @else
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->is('fastleo/app/'. $model) ? 'active' : '' }}" href="/fastleo/app/{{ $model }}">
-                                    <i class="fas fa-box-open"></i> {{ $class->fastleo ?? $model }}
+                                    <i class="fas fa-list"></i> {{ $title }}
                                 </a>
                             </li>
                         @endif
@@ -97,6 +110,7 @@
     }
 
     tinymce.init({
+        language_url: '{{ asset('storage/fastleo/js/tinymce_lang/ru.js') }}',
         selector: 'textarea.tinymce',
         theme: 'modern',
         plugins: 'print preview searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount imagetools contextmenu colorpicker textpattern help code',

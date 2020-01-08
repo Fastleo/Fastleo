@@ -12,13 +12,17 @@ class LoginController extends Controller
     /**
      * Login
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
     public function login(Request $request)
     {
         // Проверка существования конфига
         if (is_null(config('fastleo.exclude'))) {
             echo 'run console command: php artisan vendor:publish --tag=fastleo --force';
+        }
+
+        if ($request->session()->has('fastleo')) {
+            return redirect(route('fastleo.info'));
         }
 
         if ($request->post('email') and $request->post('password')) {

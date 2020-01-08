@@ -46,7 +46,12 @@ class InfoController extends Controller
 
         $params[] = [
             'title' => 'Драйвер БД',
-            'value' => env('DB_CONNECTION') . ' ' . $typeDB[0]->server_version ?? ''
+            'value' => env('DB_CONNECTION') . ' (' . ($typeDB[0]->server_version ?? '') . ')'
+        ];
+
+        $params[] = [
+            'title' => 'Максиму для загрузки',
+            'value' => ini_get("upload_max_filesize")
         ];
 
         return view('fastleo::info', [

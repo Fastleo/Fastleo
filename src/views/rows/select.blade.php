@@ -16,6 +16,7 @@
                 @endforeach
             @endif
         </select>
+        <div><small>{{ $data['description'] ?? '' }}</small></div>
     </div>
 </div>
 <hr>

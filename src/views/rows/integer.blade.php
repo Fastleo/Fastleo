@@ -4,6 +4,7 @@
         <div class="input-group">
             <input type="number" name="{{ $column }}" id="{{ $column }}" class="form-control" placeholder="{{ $data['placeholder'] ?? '' }}" value="{{ $row ? $row->{$column} : '' }}">
         </div>
+        <div><small>{{ $data['description'] ?? '' }}</small></div>
     </div>
 </div>
 <hr>

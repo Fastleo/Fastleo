@@ -14,6 +14,7 @@
                 </div>
             @endif
         </div>
+        <div><small>{{ $data['description'] ?? '' }}</small></div>
     </div>
 </div>
 <hr>

@@ -51,6 +51,7 @@
                             </div>
                         @endif
                     </div>
+                    <div><small>{{ $data['description'] ?? '' }}</small></div>
                 </div>
             </div>
             @php $i++; $j++; @endphp

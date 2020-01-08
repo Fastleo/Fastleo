@@ -28,7 +28,10 @@ class ServiceProvider extends BaseServiceProvider
         ]);
 
         // Список моделей
-        $this->app->models = Helper::getModels();
+        app()->models = Helper::getModels();
+
+        // Меню админки
+        app()->menu = Helper::getMenu(app()->models);
 
         // Route
         $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
