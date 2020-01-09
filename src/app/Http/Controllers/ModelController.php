@@ -303,17 +303,18 @@ class ModelController extends Controller
      */
     public function delete(Request $request, $model, $row_id, $die = false)
     {
-        $row = $this->app->where('id', $row_id)->first();
+        $row = $this->app->find($row_id);
         if (is_null($row)) {
             return '1';
         }
         if (isset($this->columns['sort'])) {
             if (is_null($row->sort)) {
-                $this->sortingFix($request, $model);
+                $this->sortingFix($request, $model, $die);
+                $row = $this->app->find($row_id);
             }
             $this->app->where('sort', '>', $row->sort)->decrement('sort');
         }
-        $this->app->where('id', $row->id)->delete();
+        $this->app->whereId($row->id)->delete();
         if ($die == false) {
             header('Location: ' . route('fastleo.model', [$model]) . '?' . $request->getQueryString());
             die;
@@ -406,21 +407,24 @@ class ModelController extends Controller
      * Исправление сортировки
      * @param Request $request
      * @param $model
+     * @param bool $die
      */
-    public function sortingFix(Request $request, $model)
+    public function sortingFix(Request $request, $model, $die = false)
     {
         if (isset($this->columns['sort'])) {
             $rows = $this->app::orderBy('sort')->orderBy('id')->get();
             $sort = 1;
             foreach ($rows as $row) {
-                $this->app::where('id', $row->id)->update([
+                $this->app::whereId($row->id)->update([
                     'sort' => $sort
                 ]);
                 $sort++;
             }
         }
-        header('Location: ' . route('fastleo.model', [$model]) . '?' . $request->getQueryString());
-        die;
+        if ($die == false) {
+            header('Location: ' . route('fastleo.model', [$model]) . '?' . $request->getQueryString());
+            die;
+        }
     }
 
     /**

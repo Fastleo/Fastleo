@@ -154,18 +154,20 @@
             return false;
         });
 
-        $('.addInput').on('click', function () {
+        $('.addInput').on('click', function (e) {
+            e.preventDefault();
 
             let div = $(this).closest('.include');
             let divCopy = div.clone(true);
 
             divCopy.find('input, textarea').val('');
+            divCopy.find('.delInput').attr('data-id', '');
             div.after(divCopy);
 
             let include = $('.include');
 
             include.each(function (index, value) {
-                $(this).find('input, textarea').each(function (i, v) {
+                $(this).find('input, select, textarea').each(function (i, v) {
                     let input = $(this).attr('name');
                     $(this).attr('name', input.replace(/\d+/g, index));
                 });
@@ -185,11 +187,14 @@
             return false;
         });
 
-        $('.delInput').on('click', function () {
+        $('.delInput').on('click', function (e) {
+            e.preventDefault();
+
             let id = $(this).attr('data-id');
             let model = $(this).attr('data-model');
             let div = $(this).closest('.include');
             let include = $('.include').length;
+
             if (include > 1) {
                 if (id > 0) {
                     div.hide(500, function () {

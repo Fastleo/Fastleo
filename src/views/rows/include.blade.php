@@ -36,6 +36,18 @@
                                 <input type="hidden" name="{{ $column }}[{{ $iteration }}][{{ $col }}]" value="0">
                                 <input type="checkbox" name="{{ $column }}[{{ $iteration }}][{{ $col }}]" class="form-check-input" id="{{ $col }}{{ $i }}" value="1" {{ (isset($v->{$col}) and $v->{$col} == 1) ? 'checked' : null }}>
                             </div>
+                        @elseif(isset($relation['type']) and ($relation['type'] == 'select' or $relation['type'] == 'multiselect'))
+                            <select class="form-control" id="{{ $col }}{{ $i }}" name="{{ $column }}[{{ $iteration }}][{{ $col }}]">
+                                <option value="">---</option>
+                                @if($relation['data'])
+                                    @if(!is_array($relation['data']))
+                                        @php $relation['data'] = \Fastleo\Fastleo\Helper::str2data($relation['data']); @endphp
+                                    @endif
+                                    @foreach($relation['data'] as $ok => $ov)
+                                        <option value="{{ $ok }}" @if(isset($v->{$col}) and $v->{$col} == $ok){{ 'selected' }}@endif>{{ $ov }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
                         @else
                             <input type="{{ $relation['type'] ?? 'text' }}" name="{{ $column }}[{{ $iteration }}][{{ $col }}]" id="{{ $col }}{{ $i }}" data-name="{{ $col }}" class="form-control" placeholder="{{ $relation['placeholder'] ?? '' }}" value="{{ $v->{$col} ?? '' }}">
                             @if(isset($relation['media']) and isset($v->{$col}) and $v->{$col} != '')
@@ -43,12 +55,6 @@
                                     <span class="input-group-text"><i class="fas fa-image"></i></span>
                                 </div>
                             @endif
-                            <div class="input-group-append">
-                                <span class="input-group-text addInput">+</span>
-                            </div>
-                            <div class="input-group-append">
-                                <span class="input-group-text delInput" data-model="{{ class_basename($data['model']) }}" data-id="{{ $v->id ?? '' }}">-</span>
-                            </div>
                         @endif
                     </div>
                     <div><small>{{ $data['description'] ?? '' }}</small></div>
@@ -56,6 +62,10 @@
             </div>
             @php $i++; $j++; @endphp
         @endforeach
+        <div class="col-sm-7 offset-sm-2 text-right">
+            <a href="" class="addInput">добавить ещё</a> /
+            <a href="" class="delInput" data-model="{{ class_basename($data['model']) }}" data-id="{{ $v->id ?? '' }}">удалить</a>
+        </div>
         <hr>
     </div>
 @endforeach
