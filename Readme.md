@@ -1,3 +1,13 @@
+## About
+
+Admin panel for laravel
+
+## License
+
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Used
+
 **Install Fastleo**
 
     composer require fastleo/fastleo
