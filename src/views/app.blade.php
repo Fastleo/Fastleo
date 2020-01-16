@@ -114,7 +114,7 @@
         selector: 'textarea.tinymce',
         theme: 'modern',
         plugins: 'print preview searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount imagetools contextmenu colorpicker textpattern help code',
-        toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor removeformat code | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | link image media | fontselect fontsizeselect',
+        toolbar1: 'bold italic strikethrough forecolor backcolor removeformat code | numlist bullist outdent indent | link image media | fontselect fontsizeselect',
         image_advtab: true,
         relative_urls: false,
         height: 300,
