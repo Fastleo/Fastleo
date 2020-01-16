@@ -1,5 +1,6 @@
 {
     "name": "fastleo/fastleo",
+    "description": "Admin panel for laravel",
     "type": "library",
     "license": "CC-BY-SA-4.0",
     "version": "2.2.0",
