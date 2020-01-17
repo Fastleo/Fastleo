@@ -1,13 +1,22 @@
 {
     "name": "fastleo/fastleo",
     "description": "Admin panel for laravel",
+    "keywords": [
+        "laravel",
+        "fastleo",
+        "admin",
+        "cmf",
+        "cms"
+    ],
     "type": "library",
-    "license": "CC-BY-SA-4.0",
+    "license": "MIT",
+    "homepage": "https://fastleo.ru",
     "version": "2.2.0",
     "authors": [
         {
             "name": "Roman Zakharov",
-            "email": "camanru@gmail.com"
+            "email": "camanru@gmail.com",
+            "role": "Developer"
         }
     ],
     "require": {
