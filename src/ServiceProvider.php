@@ -45,7 +45,7 @@ class ServiceProvider extends BaseServiceProvider
         // Src
         $this->publishes([
             __DIR__ . '/config/fastleo.php' => config_path('fastleo.php'),
-            __DIR__ . '/resources' => base_path('storage/app/public/fastleo'),
+            __DIR__ . '/resources' => storage_path('app/public/fastleo'),
         ], 'fastleo');
     }
 

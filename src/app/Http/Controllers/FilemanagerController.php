@@ -38,7 +38,7 @@ class FilemanagerController extends Controller
         $request->session()->save();
 
         // Абсолютный пють к текущей директории
-        $this->path = base_path('storage/app/' . $this->folder);
+        $this->path = storage_path('app/' . $this->folder);
 
         // Создание основной директории
         if (!is_dir($this->path)) {
@@ -74,7 +74,7 @@ class FilemanagerController extends Controller
             $result[$k]['preview'] = 'storage/fastleo/ico/' . strtolower($result[$k]['extension']) . '.jpg';
 
             $tmp_filename = str_replace($this->folder, $this->folder . '/thumbs', str_replace(' ', '_', $file));
-            if (file_exists(base_path('storage/app/' . strtolower($tmp_filename)))) {
+            if (file_exists(storage_path('app/' . strtolower($tmp_filename)))) {
                 $result[$k]['preview'] = 'storage' . substr(strtolower($tmp_filename), 6);
             }
         }
@@ -139,12 +139,12 @@ class FilemanagerController extends Controller
                         });
                     }
                     if ($request->has('watermark') and isset($this->setting['watermark']) and $this->setting['watermark'] != '') {
-                        $watermark = str_replace('/storage/uploads', 'storage/app/public/uploads', $this->setting['watermark']);
-                        if (is_file(base_path($watermark))) {
-                            $image->insert(base_path($watermark), 'center');
+                        $watermark = str_replace('/uploads', 'app/public/uploads', $this->setting['watermark']);
+                        if (is_file(storage_path($watermark))) {
+                            $image->insert(storage_path($watermark), 'center');
                         } else {
                             $image->text($this->setting['watermark'], $image->getWidth() / 2, $image->getHeight() / 2, function ($font) {
-                                $font->file(base_path('storage/app/public/fastleo/font/roboto.ttf'));
+                                $font->file(storage_path('app/public/fastleo/font/roboto.ttf'));
                                 $font->color(array(255, 255, 255, 0.5));
                                 $font->size(30);
                                 $font->align('center');
@@ -171,8 +171,8 @@ class FilemanagerController extends Controller
         $this->construct($request);
         if ($request->post('folder_name')) {
             $folder_name = Str::slug($request->post('folder_name'), '_');
-            File::makeDirectory(base_path('storage/app/' . $this->folder . '/' . $folder_name), 0777);
-            File::makeDirectory(base_path('storage/app/' . $this->folder . '/' . $folder_name . '/thumbs'), 0777);
+            File::makeDirectory(storage_path('app/' . $this->folder . '/' . $folder_name), 0777);
+            File::makeDirectory(storage_path('app/' . $this->folder . '/' . $folder_name . '/thumbs'), 0777);
         }
         return redirect(route('fastleo.filemanager') . '?' . $request->getQueryString());
     }
@@ -204,14 +204,14 @@ class FilemanagerController extends Controller
     {
         $this->construct($request);
         Storage::deleteDirectory($this->folder . '/thumbs');
-        File::makeDirectory(base_path('storage/app/' . $this->folder . '/thumbs'), 0777);
+        File::makeDirectory(storage_path('app/' . $this->folder . '/thumbs'), 0777);
         foreach ($this->getFiles() as $file) {
             if (in_array($file['extension'], config('fastleo.images'))) {
                 $tmp_filename = str_replace($this->folder, $this->folder . '/thumbs', strtolower($file['filename']));
-                if (!file_exists(base_path('storage/app/' . $tmp_filename))) {
-                    $image = Image::make(base_path('storage/app/' . $file['filename']));
+                if (!file_exists(storage_path('app/' . $tmp_filename))) {
+                    $image = Image::make(storage_path('app/' . $file['filename']));
                     $image->resize(122, 91);
-                    $image->save(base_path('storage/app/' . str_replace(' ', '_', $tmp_filename)));
+                    $image->save(storage_path('app/' . str_replace(' ', '_', $tmp_filename)));
                 }
             }
         }
