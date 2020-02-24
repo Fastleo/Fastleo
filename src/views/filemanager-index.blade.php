@@ -22,14 +22,16 @@
         @endforeach
 
         @foreach($files as $file)
-            <a href="" class="position-relative">
-                <div class="block image" style="background-image: url({{ asset($file['preview']) }}); cursor: pointer;" title="{{ $file['filename'] }}" data-url="/storage{{ substr($file['filename'], 6) }}">
-                    <span class="filename">
-                        {{ \Str::limit(\Fastleo\Fastleo\Helper::getName($file['filename']), 14) }}
-                    </span>
+            <div class="position-relative">
+                <div class="block image position-relative" style="background-image: url({{ asset($file['preview']) }}); cursor: pointer;" title="{{ $file['filename'] }}" data-url="/storage{{ substr($file['filename'], 6) }}">
+                    <a href="/storage{{ str_replace('public', '', $file['filename']) }}" target="_blank">
+                        <span class="filename">
+                            {{ \Str::limit(\Fastleo\Fastleo\Helper::getName($file['filename']), 14) }}
+                        </span>
+                    </a>
                 </div>
                 <input type="checkbox" class="checkbox" value="{{ $file['filename'] }}">
-            </a>
+            </div>
         @endforeach
 
     </div>
