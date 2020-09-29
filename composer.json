@@ -11,7 +11,7 @@
     "type": "library",
     "license": "MIT",
     "homepage": "https://fastleo.ru",
-    "version": "2.2.2",
+    "version": "2.3.0",
     "authors": [
         {
             "name": "Roman Zakharov",
@@ -27,10 +27,10 @@
         "doctrine/dbal": "^2.10",
         "intervention/image": "^2.5",
         "maatwebsite/excel": "^3.1",
-        "fresh/transliteration": "^2.0"
+        "fresh/transliteration": "^2.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.0"
+        "phpunit/phpunit": "^8.5"
     },
     "autoload": {
         "psr-4": {

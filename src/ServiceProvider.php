@@ -2,6 +2,9 @@
 
 namespace Fastleo\Fastleo;
 
+use Fastleo\Fastleo\app\Console\FastleoClear;
+use Fastleo\Fastleo\app\Console\FastleoResource;
+use Fastleo\Fastleo\app\Console\FastleoUser;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 class ServiceProvider extends BaseServiceProvider

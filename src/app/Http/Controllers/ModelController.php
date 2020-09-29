@@ -1,6 +1,6 @@
 <?php
 
-namespace Fastleo\Fastleo;
+namespace Fastleo\Fastleo\app\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Fastleo\Fastleo;
+namespace Fastleo\Fastleo\app\Console;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Console\Command;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Fastleo\Fastleo;
+namespace Fastleo\Fastleo\app;
 
 use Illuminate\Database\Eloquent\Model;
 
