@@ -26,12 +26,12 @@
         "ext-fileinfo": "*",
         "doctrine/dbal": "^2.10",
         "intervention/image": "^2.5",
-        "laravel/framework": "5.* - 7.*",
+        "laravel/framework": "5 - 7",
         "maatwebsite/excel": "^3.1",
         "fresh/transliteration": "^2.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.5"
+        "phpunit/phpunit": "^8.0"
     },
     "autoload": {
         "psr-4": {
