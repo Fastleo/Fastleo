@@ -82,7 +82,7 @@ class Helper
     {
         $appModels = [];
 
-        foreach (scandir(base_path('app/models')) as $file) {
+        foreach (scandir(base_path('app/Models')) as $file) {
 
             $pathInfo = pathinfo($file);
 
