@@ -43,7 +43,7 @@ class FastleoUser extends Command
      */
     public function handle()
     {
-        $user = new \App\User;
+        $user = new \App\Models\User;
         $fillables = $this->fillable;
 
         foreach ($fillables as $k => $fillable) {

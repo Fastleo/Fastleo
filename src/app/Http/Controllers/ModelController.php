@@ -3,6 +3,9 @@
 namespace Fastleo\Fastleo\app\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Fastleo\Fastleo\Export;
+use Fastleo\Fastleo\Helper;
+use Fastleo\Fastleo\Import;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -60,7 +63,7 @@ class ModelController extends Controller
         $this->name = request()->segment(3);
 
         // namespace модели
-        $this->namespace = 'App\\' . $this->name;
+        $this->namespace = 'App\\Models\\' . $this->name;
 
         // Выбираем модель для работы
         $this->app = app($this->namespace);

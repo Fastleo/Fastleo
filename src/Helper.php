@@ -82,15 +82,15 @@ class Helper
     {
         $appModels = [];
 
-        foreach (scandir(base_path('app')) as $file) {
+        foreach (scandir(base_path('app/models')) as $file) {
 
             $pathInfo = pathinfo($file);
 
             if (isset($pathInfo['extension']) and $pathInfo['extension'] == 'php') {
 
-                if ($pathInfo['filename'] != 'User' and class_exists('App\\' . $pathInfo['filename'])) {
+                if ($pathInfo['filename'] != 'User' and class_exists('App\\Models\\' . $pathInfo['filename'])) {
 
-                    $name = 'App\\' . $pathInfo['filename'];
+                    $name = 'App\\Models\\' . $pathInfo['filename'];
 
                     if (property_exists($name, 'fastleo') == false) {
                         continue;

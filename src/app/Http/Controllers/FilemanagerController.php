@@ -3,6 +3,7 @@
 namespace Fastleo\Fastleo\app\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Fastleo\Fastleo\app\Models\FastleoSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
