@@ -187,7 +187,7 @@ class ModelController extends Controller
                     $manyApp = app($name);
                     foreach ($value as $val) {
                         $many = new $manyApp;
-                        $many->{Helper::method2str($this->namespace) . '_id'} = $insert_id;
+                        $many->{\Fastleo\Fastleo\Helper::method2str($this->namespace) . '_id'} = $insert_id;
                         foreach ($val as $c => $v) {
                             $many->{$c} = $v;
                         }
@@ -260,7 +260,7 @@ class ModelController extends Controller
                             $many = new $manyApp;
                         }
                         if (!is_null($many)) {
-                            $many->{Helper::method2str($this->namespace) . '_id'} = $row_id;
+                            $many->{\Fastleo\Fastleo\Helper::method2str($this->namespace) . '_id'} = $row_id;
                             foreach ($val as $c => $v) {
                                 $many->{$c} = $v;
                             }
