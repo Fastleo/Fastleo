@@ -2,6 +2,7 @@
 
 namespace Fastleo\Fastleo\app\Console;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Console\Command;
 
@@ -43,7 +44,7 @@ class FastleoUser extends Command
      */
     public function handle()
     {
-        $user = new \App\Models\User;
+        $user = new User();
         $fillables = $this->fillable;
 
         foreach ($fillables as $k => $fillable) {
